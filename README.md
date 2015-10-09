@@ -9,7 +9,15 @@ transactions.
 ![Current release](https://img.shields.io/packagist/v/ocramius/doctrine-batch-utils.svg)
 ![Travis-CI build status](https://img.shields.io/travis/Ocramius/DoctrineBatchUtils.svg)
 
-### Current features
+## Installation
+
+Supported installation method is via [Composer](http://getcomposer.org/):
+
+```sh
+composer require ocramius/doctrine-batch-utils
+```
+
+## Current features
 
 As it stands, the only implemented utility in this repository is an 
 [`IteratorAggregate`](http://php.net/manual/en/class.iteratoraggregate.php) that 
