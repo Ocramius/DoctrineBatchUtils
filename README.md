@@ -18,6 +18,9 @@ wraps around a DB transaction and calls
 and [`ObjectManager#clear()`](https://github.com/doctrine/common/blob/v2.5.1/lib/Doctrine/Common/Persistence/ObjectManager.php#L88)
 on the given [`EntityManager`](https://github.com/doctrine/doctrine2/blob/v2.5.1/lib/Doctrine/ORM/EntityManagerInterface.php).
 
+
+#### Examples
+
 It can be used as following:
 
 ```php
@@ -37,10 +40,15 @@ foreach ($iterable as $record) {
 }
 ```
 
-Please note that the `$record` inside the loop will always be "fresh", as
-the iterator re-fetches it on its own: this prevents you from having to
+##### `$record` freshness
+
+Please note that the `$record` inside the loop will always be "fresh" 
+([`managed`](http://doctrine-orm.readthedocs.org/projects/doctrine-orm/en/latest/reference/working-with-objects.html#persisting-entities) state),
+as the iterator re-fetches it on its own: this prevents you from having to
 manually call [`ObjectManager#find()`](https://github.com/doctrine/common/blob/v2.5.1/lib/Doctrine/Common/Persistence/ObjectManager.php#L42)
 on your own for every iteration.
+
+##### Automatic flushing/clearing
 
 In this example, the `EntityManager` will be flushed and cleared only once, 
 but if there were more than 100 records, then it would flush (and clear) twice 
