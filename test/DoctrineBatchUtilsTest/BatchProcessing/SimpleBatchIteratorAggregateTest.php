@@ -127,5 +127,50 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($freshObjects, $iteratedObjects);
     }
+
+    /**
+     * @dataProvider iterationFlushesProvider
+     *
+     * @param int $resultItemsCount
+     * @param int $batchSize
+     * @param int $expectedFlushesCount
+     */
+    public function testIterationFlushesAtGivenBatchSizes($resultItemsCount, $batchSize, $expectedFlushesCount)
+    {
+        $object = new \stdClass();
+        $values = array_fill(0, $resultItemsCount, $object);
+
+        $iterator = SimpleBatchIteratorAggregate::fromArrayResult(
+            array_fill(0, $resultItemsCount, $object),
+            $this->entityManager,
+            $batchSize
+        );
+
+        $this->metadata->expects(self::any())->method('getIdentifierValues')->willReturn(['id' => 123]);
+        $this->entityManager->expects(self::exactly($resultItemsCount))->method('find')->willReturn($object);
+        $this->entityManager->expects(self::exactly($expectedFlushesCount))->method('flush');
+        $this->entityManager->expects(self::exactly($expectedFlushesCount))->method('clear');
+
+        $iteratedObjects = [];
+
+        foreach ($iterator as $key => $value) {
+            $iteratedObjects[$key] = $value;
+        }
+
+        $this->assertCount($resultItemsCount, $iteratedObjects);
+    }
+
+    /**
+     * @return int[][]
+     */
+    public function iterationFlushesProvider()
+    {
+        return [
+            [10, 5, 3],
+            [2, 1, 3],
+            [15, 5, 4],
+            [10, 2, 6],
+        ];
+    }
 }
 
