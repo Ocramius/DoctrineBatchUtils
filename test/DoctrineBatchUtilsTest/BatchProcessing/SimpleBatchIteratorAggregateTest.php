@@ -47,9 +47,9 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
      */
     public function testFromQuery()
     {
-        $this->query->expects($this->any())->method('iterate')->will($this->returnValue(new \ArrayIterator()));
+        $this->query->expects(self::any())->method('iterate')->willReturn(new \ArrayIterator());
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             SimpleBatchIteratorAggregate::class,
             SimpleBatchIteratorAggregate::fromQuery($this->query, 100)
         );
