@@ -54,5 +54,13 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
             SimpleBatchIteratorAggregate::fromQuery($this->query, 100)
         );
     }
+
+    public function testFromArray()
+    {
+        self::assertInstanceOf(
+            SimpleBatchIteratorAggregate::class,
+            SimpleBatchIteratorAggregate::fromArrayResult([], $this->entityManager, 100)
+        );
+    }
 }
 
