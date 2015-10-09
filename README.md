@@ -19,7 +19,7 @@ and [`ObjectManager#clear()`](https://github.com/doctrine/common/blob/v2.5.1/lib
 on the given [`EntityManager`](https://github.com/doctrine/doctrine2/blob/v2.5.1/lib/Doctrine/ORM/EntityManagerInterface.php).
 
 
-#### Examples
+#### Example (array iteration)
 
 It can be used as following:
 
@@ -53,3 +53,47 @@ on your own for every iteration.
 In this example, the `EntityManager` will be flushed and cleared only once, 
 but if there were more than 100 records, then it would flush (and clear) twice 
 or more.
+
+#### Example (query/iterators)
+
+The previous example is still not memory efficient, as we are operating on a
+pre-loaded array of objects loaded by the ORM.
+
+We can use queries instead:
+
+```php
+use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
+
+$iterable = SimpleBatchIteratorAggregate::fromQuery(
+    $entityManager->createQuery('SELECT f FROM Files f'),
+    100 // flush/clear after 100 iterations
+);
+
+foreach ($iterable as $record) {
+    // operate on records here
+}
+```
+
+Or our own iterator/generator:
+
+
+```php
+use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
+
+$results = function () {
+    for ($i = 0; $i < 100000000; $i += 1) {
+        yield new MyEntity($i);
+    }
+};
+
+$iterable = SimpleBatchIteratorAggregate::fromTraversableResult(
+    $results(),
+    100 // flush/clear after 100 iterations
+);
+
+foreach ($iterable as $record) {
+    // operate on records here
+}
+```
+
+Both of these approaches are much more memory efficient.
