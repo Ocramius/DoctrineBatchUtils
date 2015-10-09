@@ -99,6 +99,27 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testIterationWithNonObjects()
+    {
+        $items = ['foo' => 'bar', 'bar' => 'baz'];
+
+        $iterator = SimpleBatchIteratorAggregate::fromArrayResult($items, $this->entityManager, 100);
+
+        $this->entityManager->expects(self::never())->method('find');
+        $this->entityManager->expects(self::at(0))->method('beginTransaction');
+        $this->entityManager->expects(self::at(1))->method('flush');
+        $this->entityManager->expects(self::at(2))->method('clear');
+        $this->entityManager->expects(self::at(3))->method('commit');
+
+        $iteratedObjects = [];
+
+        foreach ($iterator as $key => $value) {
+            $iteratedObjects[$key] = $value;
+        }
+
+        $this->assertSame($items, $iteratedObjects);
+    }
+
     public function testIterationWithSuccessfulReFetches()
     {
         $originalObjects = ['foo' => new \stdClass(), 'bar' => new \stdClass()];
