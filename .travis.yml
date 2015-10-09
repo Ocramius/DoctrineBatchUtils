@@ -9,7 +9,7 @@ php:
   - hhvm
 
 before_script:
-  - sh .travis.install.sh
+  - composer install
 
 script:
   - ./vendor/bin/phpunit --disallow-test-output --report-useless-tests --coverage-clover ./clover.xml
