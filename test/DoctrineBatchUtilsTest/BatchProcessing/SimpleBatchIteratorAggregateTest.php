@@ -41,6 +41,7 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
 
         $this->query->expects(self::any())->method('getEntityManager')->willReturn($this->entityManager);
         $this->entityManager->expects(self::any())->method('getClassMetadata')->willReturn($this->metadata);
+        $this->metadata->expects(self::any())->method('getName')->willReturn('Yadda');
 
         parent::setUp();
     }
@@ -89,7 +90,6 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
     {
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult([new \stdClass()], $this->entityManager, 100);
 
-        $this->entityManager->expects(self::any())->method('getClassMetadata')->willReturn($this->metadata);
         $this->entityManager->expects(self::at(0))->method('beginTransaction');
         $this->entityManager->expects(self::at(1))->method('rollback');
 
@@ -97,6 +97,35 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
 
         foreach ($iterator as $key => $value) {
         }
+    }
+
+    public function testIterationWithSuccessfulReFetches()
+    {
+        $originalObjects = ['foo' => new \stdClass(), 'bar' => new \stdClass()];
+        $freshObjects    = ['foo' => new \stdClass(), 'bar' => new \stdClass()];
+
+        $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
+
+        $this->entityManager->expects(self::at(0))->method('beginTransaction');
+        $this->metadata->expects(self::any())->method('getIdentifierValues')->willReturnMap([
+            [$originalObjects['foo'], ['id' => 123]],
+            [$originalObjects['bar'], ['id' => 456]],
+        ]);
+        $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap([
+            ['Yadda', ['id' => 123], $freshObjects['foo']],
+            ['Yadda', ['id' => 456], $freshObjects['bar']],
+        ]);
+        $this->entityManager->expects(self::at(1))->method('flush');
+        $this->entityManager->expects(self::at(2))->method('clear');
+        $this->entityManager->expects(self::at(3))->method('commit');
+
+        $iteratedObjects = [];
+
+        foreach ($iterator as $key => $value) {
+            $iteratedObjects[$key] = $value;
+        }
+
+        $this->assertSame($freshObjects, $iteratedObjects);
     }
 }
 
