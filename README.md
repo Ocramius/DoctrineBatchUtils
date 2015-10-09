@@ -36,3 +36,8 @@ foreach ($iterable as $record) {
     // operate on records here
 }
 ```
+
+Please note that the `$record` inside the loop will always be "fresh", as
+the iterator re-fetches it on its own: this prevents you from having to
+manually call [`ObjectManager#find()`](https://github.com/doctrine/common/blob/v2.5.1/lib/Doctrine/Common/Persistence/ObjectManager.php#L42)
+on your own for every iteration.
