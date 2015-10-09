@@ -17,3 +17,22 @@ a DB transaction and calls
 [`ObjectManager#flush()`](https://github.com/doctrine/common/blob/v2.5.1/lib/Doctrine/Common/Persistence/ObjectManager.php#L120)
 and [`ObjectManager#clear()`](https://github.com/doctrine/common/blob/v2.5.1/lib/Doctrine/Common/Persistence/ObjectManager.php#L88)
 on the given [`EntityManager`](https://github.com/doctrine/doctrine2/blob/v2.5.1/lib/Doctrine/ORM/EntityManagerInterface.php).
+
+It can be used as following:
+
+```php
+use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
+
+$object1  = $entityManager->find('Foo', 1);
+$object2  = $entityManager->find('Bar', 2);
+
+$iterable = SimpleBatchIteratorAggregate::fromArrayResult(
+    [$object1, $object2], // items to iterate
+    $entityManager,       // the entity manager to operate on
+    100                   // items to traverse before flushing/clearing
+);
+
+foreach ($iterable as $record) {
+    // operate on records here
+}
+```
