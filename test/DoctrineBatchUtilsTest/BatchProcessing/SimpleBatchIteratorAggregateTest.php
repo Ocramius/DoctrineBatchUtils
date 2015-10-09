@@ -106,7 +106,6 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
 
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
 
-        $this->entityManager->expects(self::at(0))->method('beginTransaction');
         $this->metadata->expects(self::any())->method('getIdentifierValues')->willReturnMap([
             [$originalObjects['foo'], ['id' => 123]],
             [$originalObjects['bar'], ['id' => 456]],
@@ -115,6 +114,7 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
             ['Yadda', ['id' => 123], $freshObjects['foo']],
             ['Yadda', ['id' => 456], $freshObjects['bar']],
         ]);
+        $this->entityManager->expects(self::at(0))->method('beginTransaction');
         $this->entityManager->expects(self::at(1))->method('flush');
         $this->entityManager->expects(self::at(2))->method('clear');
         $this->entityManager->expects(self::at(3))->method('commit');
