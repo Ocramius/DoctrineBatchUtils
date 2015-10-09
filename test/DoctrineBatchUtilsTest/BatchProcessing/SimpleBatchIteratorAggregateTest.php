@@ -6,6 +6,7 @@ use ArrayIterator;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
+use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
 use PHPUnit_Framework_TestCase;
 
@@ -39,6 +40,7 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
         $this->metadata      = $this->getMock(ClassMetadata::class);
 
         $this->query->expects(self::any())->method('getEntityManager')->willReturn($this->entityManager);
+        $this->entityManager->expects(self::any())->method('getClassMetadata')->willReturn($this->metadata);
 
         parent::setUp();
     }
@@ -80,6 +82,20 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
 
         foreach ($iterator as $key => $value) {
             throw new \UnexpectedValueException('Iterator should have been empty!');
+        }
+    }
+
+    public function testIterationRollsBackOnMissingItems()
+    {
+        $iterator = SimpleBatchIteratorAggregate::fromArrayResult([new \stdClass()], $this->entityManager, 100);
+
+        $this->entityManager->expects(self::any())->method('getClassMetadata')->willReturn($this->metadata);
+        $this->entityManager->expects(self::at(0))->method('beginTransaction');
+        $this->entityManager->expects(self::at(1))->method('rollback');
+
+        $this->setExpectedException(MissingBatchItemException::class);
+
+        foreach ($iterator as $key => $value) {
         }
     }
 }
