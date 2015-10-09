@@ -12,8 +12,8 @@ transactions.
 ### Current features
 
 As it stands, the only implemented utility in this repository is an 
-[`IteratorAggregate`](http://php.net/manual/en/class.iteratoraggregate.php) that wraps around
-a DB transaction and calls 
+[`IteratorAggregate`](http://php.net/manual/en/class.iteratoraggregate.php) that 
+wraps around a DB transaction and calls 
 [`ObjectManager#flush()`](https://github.com/doctrine/common/blob/v2.5.1/lib/Doctrine/Common/Persistence/ObjectManager.php#L120)
 and [`ObjectManager#clear()`](https://github.com/doctrine/common/blob/v2.5.1/lib/Doctrine/Common/Persistence/ObjectManager.php#L88)
 on the given [`EntityManager`](https://github.com/doctrine/doctrine2/blob/v2.5.1/lib/Doctrine/ORM/EntityManagerInterface.php).
@@ -41,3 +41,7 @@ Please note that the `$record` inside the loop will always be "fresh", as
 the iterator re-fetches it on its own: this prevents you from having to
 manually call [`ObjectManager#find()`](https://github.com/doctrine/common/blob/v2.5.1/lib/Doctrine/Common/Persistence/ObjectManager.php#L42)
 on your own for every iteration.
+
+In this example, the `EntityManager` will be flushed and cleared only once, 
+but if there were more than 100 records, then it would flush (and clear) twice 
+or more.
