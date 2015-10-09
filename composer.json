@@ -31,7 +31,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "DoctrineBatchUtilsTest\\": "tests/DoctrineBatchUtilsTest",
+            "DoctrineBatchUtilsTest\\": "tests/DoctrineBatchUtilsTest"
         }
     }
 }
