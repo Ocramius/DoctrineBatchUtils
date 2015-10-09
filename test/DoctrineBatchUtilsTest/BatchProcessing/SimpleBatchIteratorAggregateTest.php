@@ -43,9 +43,6 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
         parent::setUp();
     }
 
-    /**
-     * @return void
-     */
     public function testFromQuery()
     {
         $this->query->expects(self::any())->method('iterate')->willReturn(new ArrayIterator());
@@ -70,6 +67,20 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
             SimpleBatchIteratorAggregate::class,
             SimpleBatchIteratorAggregate::fromTraversableResult(new ArrayIterator([]), $this->entityManager, 100)
         );
+    }
+
+    public function testIterationWithEmptySet()
+    {
+        $iterator = SimpleBatchIteratorAggregate::fromArrayResult([], $this->entityManager, 100);
+
+        $this->entityManager->expects(self::at(0))->method('beginTransaction');
+        $this->entityManager->expects(self::at(1))->method('flush');
+        $this->entityManager->expects(self::at(2))->method('clear');
+        $this->entityManager->expects(self::at(3))->method('commit');
+
+        foreach ($iterator as $key => $value) {
+            throw new \UnexpectedValueException('Iterator should have been empty!');
+        }
     }
 }
 
