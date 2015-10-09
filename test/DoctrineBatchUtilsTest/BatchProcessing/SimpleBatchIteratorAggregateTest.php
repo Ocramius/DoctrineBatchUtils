@@ -2,6 +2,7 @@
 
 namespace DoctrineBatchUtilsTest\BatchProcessing;
 
+use ArrayIterator;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
@@ -47,7 +48,7 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
      */
     public function testFromQuery()
     {
-        $this->query->expects(self::any())->method('iterate')->willReturn(new \ArrayIterator());
+        $this->query->expects(self::any())->method('iterate')->willReturn(new ArrayIterator());
 
         self::assertInstanceOf(
             SimpleBatchIteratorAggregate::class,
@@ -60,6 +61,14 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
         self::assertInstanceOf(
             SimpleBatchIteratorAggregate::class,
             SimpleBatchIteratorAggregate::fromArrayResult([], $this->entityManager, 100)
+        );
+    }
+
+    public function testFromTraversableResult()
+    {
+        self::assertInstanceOf(
+            SimpleBatchIteratorAggregate::class,
+            SimpleBatchIteratorAggregate::fromTraversableResult(new ArrayIterator([]), $this->entityManager, 100)
         );
     }
 }
