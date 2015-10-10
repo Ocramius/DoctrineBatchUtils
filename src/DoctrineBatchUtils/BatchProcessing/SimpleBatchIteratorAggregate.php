@@ -76,7 +76,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
 
         try {
             foreach ($resultSet as $key => $value) {
-                $iteration += 1;
+                ++$iteration;
 
                 if (! is_object($value)) {
                     yield $key => $value;
