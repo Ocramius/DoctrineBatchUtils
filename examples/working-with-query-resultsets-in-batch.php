@@ -24,7 +24,6 @@ $persistAllEntries = SimpleBatchIteratorAggregate::fromTraversableResult(
 /** @var $savedEntries MyEntity[] */
 $savedEntries = SimpleBatchIteratorAggregate::fromQuery(
     $entityManager->createQuery(sprintf('SELECT e FROM %s e', MyEntity::class)),
-    $entityManager,
     100 // flush/clear after 100 iterations
 );
 
