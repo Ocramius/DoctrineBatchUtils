@@ -8,12 +8,12 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate
  */
-final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
+final class SimpleBatchIteratorAggregateTest extends TestCase
 {
     /**
      * @var AbstractQuery|\PHPUnit_Framework_MockObject_MockObject
