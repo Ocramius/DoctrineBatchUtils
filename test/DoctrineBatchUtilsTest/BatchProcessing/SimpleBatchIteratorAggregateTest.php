@@ -150,6 +150,39 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * \Doctrine\ORM\AbstractQuery#iterate() produces nested results like [[entity],[entity],[entity]] instead
+     * of a flat [entity,entity,entity], so we have to unwrap the results to refresh them.
+     */
+    public function testIterationWithSuccessfulReFetchesInNestedIterableResut()
+    {
+        $originalObjects = [[new \stdClass()], [new \stdClass()]];
+        $freshObjects    = [new \stdClass(), new \stdClass()];
+
+        $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
+
+        $this->metadata->expects(self::any())->method('getIdentifierValues')->willReturnMap([
+            [$originalObjects[0][0], ['id' => 123]],
+            [$originalObjects[1][0], ['id' => 456]],
+        ]);
+        $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap([
+            ['Yadda', ['id' => 123], $freshObjects[0]],
+            ['Yadda', ['id' => 456], $freshObjects[1]],
+        ]);
+        $this->entityManager->expects(self::at(0))->method('beginTransaction');
+        $this->entityManager->expects(self::at(1))->method('flush');
+        $this->entityManager->expects(self::at(2))->method('clear');
+        $this->entityManager->expects(self::at(3))->method('commit');
+
+        $iteratedObjects = [];
+
+        foreach ($iterator as $key => $value) {
+            $iteratedObjects[$key] = $value;
+        }
+
+        $this->assertSame([[$freshObjects[0]], [$freshObjects[1]]], $iteratedObjects);
+    }
+
+    /**
      * @dataProvider iterationFlushesProvider
      *
      * @param int $resultItemsCount
