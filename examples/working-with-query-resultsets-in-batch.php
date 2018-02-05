@@ -30,6 +30,6 @@ $savedEntries = SimpleBatchIteratorAggregate::fromQuery(
 foreach ($savedEntries as $savedEntry) {
     // operate on records here
 
-    var_dump([MyEntity::class => $savedEntry->id]);
+    var_dump([MyEntity::class => $savedEntry[0]->id]);
     var_dump(['memory_get_peak_usage()' => (memory_get_peak_usage(true) / 1024 / 1024) . ' MiB']);
 }
