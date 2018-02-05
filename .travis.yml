@@ -15,6 +15,6 @@ before_script:
   - travis_retry composer update --prefer-dist $DEPENDENCIES
 
 script:
-  - ./vendor/bin/phpunit --disallow-test-output --report-useless-tests --coverage-clover ./clover.xml
+  - ./vendor/bin/phpunit --coverage-clover ./clover.xml
   - php examples/persisting-new-objects-in-batch.php > /dev/null
   - php examples/working-with-query-resultsets-in-batch.php > /dev/null
