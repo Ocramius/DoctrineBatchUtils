@@ -3,8 +3,6 @@
 use Doctrine\ORM\EntityManager;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
 /** @var $entityManager EntityManager */
 $entityManager = call_user_func(require __DIR__ . '/bootstrap-orm.php');
 
