@@ -20,3 +20,5 @@ before_script:
 
 script:
   - ./vendor/bin/phpunit --disallow-test-output --report-useless-tests --coverage-clover ./clover.xml
+  - php examples/persisting-new-objects-in-batch.php > /dev/null
+  - php examples/working-with-query-resultsets-in-batch.php > /dev/null
