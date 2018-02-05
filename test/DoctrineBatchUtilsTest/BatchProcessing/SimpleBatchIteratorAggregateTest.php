@@ -93,7 +93,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $this->entityManager->expects(self::at(0))->method('beginTransaction');
         $this->entityManager->expects(self::at(1))->method('rollback');
 
-        $this->setExpectedException(MissingBatchItemException::class);
+        $this->expectException(MissingBatchItemException::class);
 
         foreach ($iterator as $key => $value) {
         }
