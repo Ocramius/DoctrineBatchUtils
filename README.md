@@ -88,14 +88,16 @@ Or our own iterator/generator:
 ```php
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
 
+// This is where you'd persist/create/load your entities (a lot of them!)
 $results = function () {
     for ($i = 0; $i < 100000000; $i += 1) {
         yield new MyEntity($i);
     }
 };
-
+ 
 $iterable = SimpleBatchIteratorAggregate::fromTraversableResult(
     $results(),
+    $entityManager,
     100 // flush/clear after 100 iterations
 );
 
