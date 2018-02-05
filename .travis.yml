@@ -11,8 +11,12 @@ php:
   - nightly
   - hhvm
 
+env:
+  - DEPENDENCIES="--prefer-lowest --prefer-stable"
+  - DEPENDENCIES=""
+
 before_script:
-  - composer install
+  - travis_retry composer update --prefer-dist $DEPENDENCIES
 
 script:
   - ./vendor/bin/phpunit --disallow-test-output --report-useless-tests --coverage-clover ./clover.xml
