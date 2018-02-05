@@ -35,9 +35,9 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->query         = $this->getMock(AbstractQuery::class, [], [], '', false);
-        $this->entityManager = $this->getMock(EntityManagerInterface::class);
-        $this->metadata      = $this->getMock(ClassMetadata::class);
+        $this->query         = $this->createMock(AbstractQuery::class);
+        $this->entityManager = $this->createMock(EntityManagerInterface::class);
+        $this->metadata      = $this->createMock(ClassMetadata::class);
 
         $this->query->expects(self::any())->method('getEntityManager')->willReturn($this->entityManager);
         $this->entityManager->expects(self::any())->method('getClassMetadata')->willReturn($this->metadata);
