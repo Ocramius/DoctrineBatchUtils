@@ -183,6 +183,36 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * \Doctrine\ORM\AbstractQuery#iterate() produces nested results like [[entity],[entity],[entity]] instead
+     * of a flat [entity,entity,entity], so we have to skip any entries that do not look like those.
+     */
+    public function testWillNotReFetchEntitiesInNonIterableAlikeResult()
+    {
+        $originalObjects = [
+            [new \stdClass(), new \stdClass()],
+            ['123'],
+            [],
+            [1 => new \stdClass()],
+        ];
+
+        $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
+
+        $this->entityManager->expects(self::never())->method('find');
+        $this->entityManager->expects(self::at(0))->method('beginTransaction');
+        $this->entityManager->expects(self::at(1))->method('flush');
+        $this->entityManager->expects(self::at(2))->method('clear');
+        $this->entityManager->expects(self::at(3))->method('commit');
+
+        $iteratedObjects = [];
+
+        foreach ($iterator as $key => $value) {
+            $iteratedObjects[$key] = $value;
+        }
+
+        $this->assertSame($originalObjects, $iteratedObjects);
+    }
+
+    /**
      * @dataProvider iterationFlushesProvider
      *
      * @param int $resultItemsCount
