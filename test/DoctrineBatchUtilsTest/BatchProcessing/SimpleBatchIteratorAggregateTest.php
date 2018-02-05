@@ -159,7 +159,6 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
     public function testIterationFlushesAtGivenBatchSizes($resultItemsCount, $batchSize, $expectedFlushesCount)
     {
         $object = new \stdClass();
-        $values = array_fill(0, $resultItemsCount, $object);
 
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult(
             array_fill(0, $resultItemsCount, $object),
