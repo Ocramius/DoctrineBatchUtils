@@ -59,7 +59,7 @@ $entityManager = $configureOrm();
 /** @var $iterable int[] */
 $iterable = SimpleBatchIteratorAggregate::fromTraversableResult(
     call_user_func(function () use ($entityManager) {
-        for ($i = 0; $i < 100000; $i += 1) {
+        for ($i = 0; $i < 10000; $i += 1) {
             $entityManager->persist(new MyEntity($i));
 
             yield $i;
