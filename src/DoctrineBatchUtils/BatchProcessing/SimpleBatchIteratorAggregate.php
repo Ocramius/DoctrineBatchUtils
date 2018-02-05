@@ -70,13 +70,20 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     public function getIterator()
     {
         $iteration = 0;
-        $resultSet = clone $this->resultSet;
+        $resultSet = $this->resultSet;
 
         $this->entityManager->beginTransaction();
 
         try {
             foreach ($resultSet as $key => $value) {
                 $iteration += 1;
+
+                if (is_array($value) && isset($value[0]) && is_object($value[0]) && [$value[0]] === $value) {
+                    yield $key => [$this->reFetchObject($value[0])];
+
+                    $this->flushAndClearBatch($iteration);
+                    continue;
+                }
 
                 if (! is_object($value)) {
                     yield $key => $value;

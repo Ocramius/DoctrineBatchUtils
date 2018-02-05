@@ -8,12 +8,12 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate
  */
-final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
+final class SimpleBatchIteratorAggregateTest extends TestCase
 {
     /**
      * @var AbstractQuery|\PHPUnit_Framework_MockObject_MockObject
@@ -35,9 +35,9 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->query         = $this->getMock(AbstractQuery::class, [], [], '', false);
-        $this->entityManager = $this->getMock(EntityManagerInterface::class);
-        $this->metadata      = $this->getMock(ClassMetadata::class);
+        $this->query         = $this->createMock(AbstractQuery::class);
+        $this->entityManager = $this->createMock(EntityManagerInterface::class);
+        $this->metadata      = $this->createMock(ClassMetadata::class);
 
         $this->query->expects(self::any())->method('getEntityManager')->willReturn($this->entityManager);
         $this->entityManager->expects(self::any())->method('getClassMetadata')->willReturn($this->metadata);
@@ -93,7 +93,7 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
         $this->entityManager->expects(self::at(0))->method('beginTransaction');
         $this->entityManager->expects(self::at(1))->method('rollback');
 
-        $this->setExpectedException(MissingBatchItemException::class);
+        $this->expectException(MissingBatchItemException::class);
 
         foreach ($iterator as $key => $value) {
         }
@@ -150,6 +150,69 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * \Doctrine\ORM\AbstractQuery#iterate() produces nested results like [[entity],[entity],[entity]] instead
+     * of a flat [entity,entity,entity], so we have to unwrap the results to refresh them.
+     */
+    public function testIterationWithSuccessfulReFetchesInNestedIterableResut()
+    {
+        $originalObjects = [[new \stdClass()], [new \stdClass()]];
+        $freshObjects    = [new \stdClass(), new \stdClass()];
+
+        $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
+
+        $this->metadata->expects(self::any())->method('getIdentifierValues')->willReturnMap([
+            [$originalObjects[0][0], ['id' => 123]],
+            [$originalObjects[1][0], ['id' => 456]],
+        ]);
+        $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap([
+            ['Yadda', ['id' => 123], $freshObjects[0]],
+            ['Yadda', ['id' => 456], $freshObjects[1]],
+        ]);
+        $this->entityManager->expects(self::at(0))->method('beginTransaction');
+        $this->entityManager->expects(self::at(1))->method('flush');
+        $this->entityManager->expects(self::at(2))->method('clear');
+        $this->entityManager->expects(self::at(3))->method('commit');
+
+        $iteratedObjects = [];
+
+        foreach ($iterator as $key => $value) {
+            $iteratedObjects[$key] = $value;
+        }
+
+        $this->assertSame([[$freshObjects[0]], [$freshObjects[1]]], $iteratedObjects);
+    }
+
+    /**
+     * \Doctrine\ORM\AbstractQuery#iterate() produces nested results like [[entity],[entity],[entity]] instead
+     * of a flat [entity,entity,entity], so we have to skip any entries that do not look like those.
+     */
+    public function testWillNotReFetchEntitiesInNonIterableAlikeResult()
+    {
+        $originalObjects = [
+            [new \stdClass(), new \stdClass()],
+            ['123'],
+            [],
+            [1 => new \stdClass()],
+        ];
+
+        $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
+
+        $this->entityManager->expects(self::never())->method('find');
+        $this->entityManager->expects(self::at(0))->method('beginTransaction');
+        $this->entityManager->expects(self::at(1))->method('flush');
+        $this->entityManager->expects(self::at(2))->method('clear');
+        $this->entityManager->expects(self::at(3))->method('commit');
+
+        $iteratedObjects = [];
+
+        foreach ($iterator as $key => $value) {
+            $iteratedObjects[$key] = $value;
+        }
+
+        $this->assertSame($originalObjects, $iteratedObjects);
+    }
+
+    /**
      * @dataProvider iterationFlushesProvider
      *
      * @param int $resultItemsCount
@@ -159,7 +222,6 @@ final class SimpleBatchIteratorAggregateTest extends PHPUnit_Framework_TestCase
     public function testIterationFlushesAtGivenBatchSizes($resultItemsCount, $batchSize, $expectedFlushesCount)
     {
         $object = new \stdClass();
-        $values = array_fill(0, $resultItemsCount, $object);
 
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult(
             array_fill(0, $resultItemsCount, $object),

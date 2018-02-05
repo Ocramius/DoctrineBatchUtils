@@ -18,12 +18,12 @@
         }
     ],
     "require": {
-        "php":             "~5.5|~7.0",
-        "doctrine/orm":    "~2.4",
-        "doctrine/common": "~2.4"
+        "php":             "^7.1.0",
+        "doctrine/orm":    "^2.6.0",
+        "doctrine/common": "^2.8.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0|~5.0"
+        "phpunit/phpunit": "^7.0.0"
     },
     "autoload": {
         "psr-4": {
@@ -32,7 +32,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "DoctrineBatchUtilsTest\\": "tests/DoctrineBatchUtilsTest"
+            "DoctrineBatchUtilsTest\\": "test/DoctrineBatchUtilsTest"
         }
     }
 }
