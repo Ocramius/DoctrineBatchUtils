@@ -70,7 +70,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     public function getIterator()
     {
         $iteration = 0;
-        $resultSet = clone $this->resultSet;
+        $resultSet = $this->resultSet;
 
         $this->entityManager->beginTransaction();
 
