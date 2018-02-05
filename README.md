@@ -91,7 +91,7 @@ use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
 // This is where you'd persist/create/load your entities (a lot of them!)
 $results = function () {
     for ($i = 0; $i < 100000000; $i += 1) {
-        yield new MyEntity($i);
+        yield new MyEntity($i); // note: identifier must exist in the DB
     }
 };
  
