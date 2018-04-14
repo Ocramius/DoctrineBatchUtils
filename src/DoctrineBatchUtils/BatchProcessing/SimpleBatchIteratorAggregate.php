@@ -27,6 +27,13 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     private $batchSize;
 
     /**
+     * Class name of the object returned by this iterator
+     *
+     * @var string
+     */
+    private $objectClass;
+
+    /**
      * @param AbstractQuery $query
      * @param int           $batchSize
      *
@@ -127,8 +134,9 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
      */
     private function reFetchObject($object)
     {
-        $metadata   = $this->entityManager->getClassMetadata(get_class($object));
-        $freshValue = $this->entityManager->find($metadata->getName(), $metadata->getIdentifierValues($object));
+        $this->objectClass = get_class($object);
+        $metadata          = $this->entityManager->getClassMetadata($this->objectClass);
+        $freshValue        = $this->entityManager->find($metadata->getName(), $metadata->getIdentifierValues($object));
 
         if (! $freshValue) {
             throw MissingBatchItemException::fromInvalidReference($metadata, $object);
@@ -157,7 +165,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     private function flushAndClearEntityManager()
     {
         $this->entityManager->flush();
-        $this->entityManager->clear();
+        $this->entityManager->clear($this->objectClass);
     }
 }
 
