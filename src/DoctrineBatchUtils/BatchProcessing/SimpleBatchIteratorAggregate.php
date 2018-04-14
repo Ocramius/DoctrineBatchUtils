@@ -22,7 +22,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     private $entityManager;
 
     /**
-     * @var
+     * @var int
      */
     private $batchSize;
 
@@ -52,7 +52,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     /**
      * @param Traversable            $results
      * @param EntityManagerInterface $entityManager
-     * @param                        $batchSize
+     * @param int                    $batchSize
      *
      * @return self
      */
@@ -111,7 +111,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
      *
      * @param Traversable            $resultSet
      * @param EntityManagerInterface $entityManager
-     * @param                        $batchSize
+     * @param int                    $batchSize
      */
     private function __construct(Traversable $resultSet, EntityManagerInterface $entityManager, $batchSize)
     {
