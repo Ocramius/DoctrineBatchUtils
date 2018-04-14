@@ -32,7 +32,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
      *
      * @return self
      */
-    public static function fromQuery(AbstractQuery $query, $batchSize)
+    public static function fromQuery(AbstractQuery $query, int $batchSize)
     {
         return new self($query->iterate(), $query->getEntityManager(), $batchSize);
     }
@@ -44,7 +44,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
      *
      * @return self
      */
-    public static function fromArrayResult(array $results, EntityManagerInterface $entityManager, $batchSize)
+    public static function fromArrayResult(array $results, EntityManagerInterface $entityManager, int $batchSize)
     {
         return new self(new ArrayIterator($results), $entityManager, $batchSize);
     }
@@ -59,7 +59,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     public static function fromTraversableResult(
         Traversable $results,
         EntityManagerInterface $entityManager,
-        $batchSize
+        int $batchSize
     ) {
         return new self($results, $entityManager, $batchSize);
     }
@@ -113,7 +113,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
      * @param EntityManagerInterface $entityManager
      * @param int                    $batchSize
      */
-    private function __construct(Traversable $resultSet, EntityManagerInterface $entityManager, $batchSize)
+    private function __construct(Traversable $resultSet, EntityManagerInterface $entityManager, int $batchSize)
     {
         $this->resultSet     = $resultSet;
         $this->entityManager = $entityManager;
