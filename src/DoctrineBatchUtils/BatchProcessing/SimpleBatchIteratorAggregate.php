@@ -78,11 +78,14 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
             foreach ($resultSet as $key => $value) {
                 $iteration += 1;
 
-                if (is_array($value) && isset($value[0]) && is_object($value[0]) && [$value[0]] === $value) {
-                    yield $key => [$this->reFetchObject($value[0])];
+                if (is_array($value)) {
+                    $firstKey = key($value);
+                    if ($firstKey !== null && is_object($value[$firstKey]) && [$firstKey => $value[$firstKey]] === $value) {
+                        yield $key => $this->reFetchObject($value[$firstKey]);
 
-                    $this->flushAndClearBatch($iteration);
-                    continue;
+                        $this->flushAndClearBatch($iteration);
+                        continue;
+                    }
                 }
 
                 if (! is_object($value)) {
@@ -160,4 +163,3 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         $this->entityManager->clear();
     }
 }
-
