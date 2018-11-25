@@ -51,7 +51,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     /**
      * {@inheritDoc}
      */
-    public function getIterator()
+    public function getIterator() : iterable
     {
         $iteration = 0;
         $resultSet = $this->resultSet;
