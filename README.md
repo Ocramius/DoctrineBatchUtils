@@ -104,6 +104,8 @@ $iterable = SimpleBatchIteratorAggregate::fromTraversableResult(
 foreach ($iterable as $record) {
     // operate on records here
 }
+
+// eventually after all records have been processed, the assembled transaction will be committed to the database
 ```
 
 Both of these approaches are much more memory efficient.
