@@ -18,14 +18,14 @@
         }
     ],
     "require": {
-        "php":             "^7.2.0",
-        "doctrine/orm":    "^2.6.0",
-        "doctrine/common": "^2.8.1"
+        "php":             "^7.3.0",
+        "doctrine/orm":    "^2.6.3",
+        "doctrine/common": "^2.10.0"
     },
     "require-dev": {
         "doctrine/coding-standard": "^5.0.1",
         "infection/infection": "^0.12.2",
-        "phpunit/phpunit": "^7.0.0"
+        "phpunit/phpunit": "^8.0.4"
     },
     "autoload": {
         "psr-4": {
