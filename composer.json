@@ -25,6 +25,8 @@
     "require-dev": {
         "doctrine/coding-standard": "^5.0.1",
         "infection/infection": "^0.12.2",
+        "phpstan/phpstan": "^0.11.2",
+        "phpstan/phpstan-phpunit": "^0.11.0",
         "phpunit/phpunit": "^8.0.4"
     },
     "autoload": {
