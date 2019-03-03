@@ -9,16 +9,12 @@ php:
   - 7.4snapshot
   - nightly
 
-matrix:
-  allow_failures:
-    - php: nightly
-
 env:
-  - DEPENDENCIES="--prefer-lowest --prefer-stable"
-  - DEPENDENCIES=""
+  - DEPENDENCIES="high"
+  - DEPENDENCIES="low"
 
 before_script:
-  - travis_retry composer update --prefer-dist $DEPENDENCIES
+  - travis_retry sh .travis.install.sh
 
 script:
   - ./vendor/bin/phpunit --coverage-clover ./clover.xml
