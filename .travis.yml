@@ -5,14 +5,16 @@ sudo: false
 php:
   - 7.1
   - 7.2
+  - 7.3
+  - 7.4snapshot
   - nightly
 
 env:
-  - DEPENDENCIES="--prefer-lowest --prefer-stable"
-  - DEPENDENCIES=""
+  - DEPENDENCIES="high"
+  - DEPENDENCIES="low"
 
 before_script:
-  - travis_retry composer update --prefer-dist $DEPENDENCIES
+  - travis_retry sh .travis.install.sh
 
 script:
   - ./vendor/bin/phpunit --coverage-clover ./clover.xml
