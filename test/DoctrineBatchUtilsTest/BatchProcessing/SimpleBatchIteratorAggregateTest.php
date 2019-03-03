@@ -34,7 +34,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->query         = $this->createMock(AbstractQuery::class);
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
