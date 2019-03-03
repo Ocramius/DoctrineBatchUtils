@@ -23,7 +23,8 @@
         "doctrine/common": "^2.8.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0.0"
+        "phpunit/phpunit": "^7.0.0",
+        "infection/infection": "^0.12.2"
     },
     "autoload": {
         "psr-4": {
