@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineBatchUtilsTest\BatchProcessing;
 
 use ArrayIterator;
@@ -9,26 +11,24 @@ use Doctrine\ORM\EntityManagerInterface;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 use stdClass;
+use UnexpectedValueException;
+use function array_fill;
+use function count;
 
 /**
  * @covers \DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate
  */
 final class SimpleBatchIteratorAggregateTest extends TestCase
 {
-    /**
-     * @var AbstractQuery|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var AbstractQuery|PHPUnit_Framework_MockObject_MockObject */
     private $query;
 
-    /**
-     * @var EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var EntityManagerInterface|PHPUnit_Framework_MockObject_MockObject */
     private $entityManager;
 
-    /**
-     * @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var ClassMetadata|PHPUnit_Framework_MockObject_MockObject */
     private $metadata;
 
     /**
@@ -47,7 +47,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         parent::setUp();
     }
 
-    public function testFromQuery()
+    public function testFromQuery() : void
     {
         $this->query->expects(self::any())->method('iterate')->willReturn(new ArrayIterator());
 
@@ -57,7 +57,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         );
     }
 
-    public function testFromArray()
+    public function testFromArray() : void
     {
         self::assertInstanceOf(
             SimpleBatchIteratorAggregate::class,
@@ -65,7 +65,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         );
     }
 
-    public function testFromTraversableResult()
+    public function testFromTraversableResult() : void
     {
         self::assertInstanceOf(
             SimpleBatchIteratorAggregate::class,
@@ -73,7 +73,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         );
     }
 
-    public function testIterationWithEmptySet()
+    public function testIterationWithEmptySet() : void
     {
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult([], $this->entityManager, 100);
 
@@ -83,13 +83,13 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $this->entityManager->expects(self::at(3))->method('commit');
 
         foreach ($iterator as $key => $value) {
-            throw new \UnexpectedValueException('Iterator should have been empty!');
+            throw new UnexpectedValueException('Iterator should have been empty!');
         }
     }
 
-    public function testIterationRollsBackOnMissingItems()
+    public function testIterationRollsBackOnMissingItems() : void
     {
-        $iterator = SimpleBatchIteratorAggregate::fromArrayResult([new \stdClass()], $this->entityManager, 100);
+        $iterator = SimpleBatchIteratorAggregate::fromArrayResult([new stdClass()], $this->entityManager, 100);
 
         $this->entityManager->expects(self::at(0))->method('beginTransaction');
         $this->entityManager->expects(self::at(1))->method('rollback');
@@ -97,10 +97,11 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $this->expectException(MissingBatchItemException::class);
 
         foreach ($iterator as $key => $value) {
+            $dummy = $key;
         }
     }
 
-    public function testIterationWithNonObjects()
+    public function testIterationWithNonObjects() : void
     {
         $items = ['foo' => 'bar', 'bar' => 'baz'];
 
@@ -121,10 +122,10 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $this->assertSame($items, $iteratedObjects);
     }
 
-    public function testIterationWithSuccessfulReFetches()
+    public function testIterationWithSuccessfulReFetches() : void
     {
-        $originalObjects = ['foo' => new \stdClass(), 'bar' => new \stdClass()];
-        $freshObjects    = ['foo' => new \stdClass(), 'bar' => new \stdClass()];
+        $originalObjects = ['foo' => new stdClass(), 'bar' => new stdClass()];
+        $freshObjects    = ['foo' => new stdClass(), 'bar' => new stdClass()];
 
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
 
@@ -156,8 +157,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
      */
     public function testIterationWithSuccessfulReFetchesInNestedIterableResult() : void
     {
-        $originalObjects = [[new \stdClass()], [new \stdClass()]];
-        $freshObjects    = [new \stdClass(), new \stdClass()];
+        $originalObjects = [[new stdClass()], [new stdClass()]];
+        $freshObjects    = [new stdClass(), new stdClass()];
 
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
 
@@ -166,8 +167,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
 
     public function testIterationWithSuccessfulReFetchesInNestedIterableResultFromQuery() : void
     {
-        $originalObjects = [[new \stdClass()], [new \stdClass()]];
-        $freshObjects    = [new \stdClass(), new \stdClass()];
+        $originalObjects = [[new stdClass()], [new stdClass()]];
+        $freshObjects    = [new stdClass(), new stdClass()];
 
         $this->query->method('iterate')->willReturn(new ArrayIterator($originalObjects));
         $iterator = SimpleBatchIteratorAggregate::fromQuery($this->query, 100);
@@ -177,8 +178,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
 
     public function testIterationWithSuccessfulReFetchesInNestedIterableResultFromTraversableResult() : void
     {
-        $originalObjects = [[new \stdClass()], [new \stdClass()]];
-        $freshObjects    = [new \stdClass(), new \stdClass()];
+        $originalObjects = [[new stdClass()], [new stdClass()]];
+        $freshObjects    = [new stdClass(), new stdClass()];
 
         $this->query->method('iterate')->willReturn(new ArrayIterator($originalObjects));
         $iterator = SimpleBatchIteratorAggregate::fromTraversableResult(new ArrayIterator($originalObjects), $this->entityManager, 100);
@@ -188,9 +189,9 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
 
     /**
      * @param stdClass[][] $originalObjects
-     * @param stdClass[] $freshObjects
+     * @param stdClass[]   $freshObjects
      */
-    private function assertSuccessfulReFetchesInNestedIterableResult(SimpleBatchIteratorAggregate $iterator, array $originalObjects, array $freshObjects)
+    private function assertSuccessfulReFetchesInNestedIterableResult(SimpleBatchIteratorAggregate $iterator, array $originalObjects, array $freshObjects) : void
     {
         $this->metadata->method('getIdentifierValues')->willReturnMap(
             [
@@ -222,10 +223,10 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
      * \Doctrine\ORM\AbstractQuery#iterate() produces nested results like [[entity],[entity],[entity]] instead
      * of a flat [entity,entity,entity], so we have to skip any entries that do not look like those.
      */
-    public function testWillNotReFetchEntitiesInNonIterableAlikeResult()
+    public function testWillNotReFetchEntitiesInNonIterableAlikeResult() : void
     {
         $originalObjects = [
-            [new \stdClass(), new \stdClass()],
+            [new stdClass(), new stdClass()],
             ['123'],
             [],
         ];
@@ -249,14 +250,10 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
 
     /**
      * @dataProvider iterationFlushesProvider
-     *
-     * @param int $resultItemsCount
-     * @param int $batchSize
-     * @param int $expectedFlushesCount
      */
-    public function testIterationFlushesAtGivenBatchSizes($resultItemsCount, $batchSize, $expectedFlushesCount)
+    public function testIterationFlushesAtGivenBatchSizes(int $resultItemsCount, int $batchSize, int $expectedFlushesCount) : void
     {
-        $object = new \stdClass();
+        $object = new stdClass();
 
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult(
             array_fill(0, $resultItemsCount, $object),
@@ -281,7 +278,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     /**
      * @return int[][]
      */
-    public function iterationFlushesProvider()
+    public function iterationFlushesProvider() : array
     {
         return [
             [10, 5, 3],

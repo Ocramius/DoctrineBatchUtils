@@ -1,21 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineBatchUtilsTest\BatchProcessing\Exception;
 
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\Exception\ExceptionInterface;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use UnexpectedValueException;
+use function spl_object_hash;
 
 /**
  * @covers \DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException
  */
 final class MissingBatchItemExceptionTest extends TestCase
 {
-    public function testFromInvalidReference()
+    public function testFromInvalidReference() : void
     {
-        $object   = new \stdClass();
+        $object   = new stdClass();
         $metadata = $this->createMock(ClassMetadata::class);
 
         $metadata->expects(self::any())->method('getName')->willReturn('Foo');
