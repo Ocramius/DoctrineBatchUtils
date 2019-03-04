@@ -1,66 +1,50 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DoctrineBatchUtils\BatchProcessing;
 
 use ArrayIterator;
-use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
+use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use IteratorAggregate;
+use Throwable;
 use Traversable;
+use function get_class;
+use function is_array;
+use function is_object;
+use function key;
 
 final class SimpleBatchIteratorAggregate implements IteratorAggregate
 {
-    /**
-     * @var Traversable
-     */
+    /** @var Traversable */
     private $resultSet;
 
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var EntityManagerInterface */
     private $entityManager;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $batchSize;
 
-    /**
-     * @param AbstractQuery $query
-     * @param int           $batchSize
-     *
-     * @return self
-     */
-    public static function fromQuery(AbstractQuery $query, int $batchSize)
+    public static function fromQuery(AbstractQuery $query, int $batchSize) : self
     {
         return new self($query->iterate(), $query->getEntityManager(), $batchSize);
     }
 
     /**
-     * @param object[]               $results
-     * @param EntityManagerInterface $entityManager
-     * @param int                    $batchSize
-     *
-     * @return self
+     * @param object[] $results
      */
-    public static function fromArrayResult(array $results, EntityManagerInterface $entityManager, int $batchSize)
+    public static function fromArrayResult(array $results, EntityManagerInterface $entityManager, int $batchSize) : self
     {
         return new self(new ArrayIterator($results), $entityManager, $batchSize);
     }
 
-    /**
-     * @param Traversable            $results
-     * @param EntityManagerInterface $entityManager
-     * @param int                    $batchSize
-     *
-     * @return self
-     */
     public static function fromTraversableResult(
         Traversable $results,
         EntityManagerInterface $entityManager,
         int $batchSize
-    ) {
+    ) : self {
         return new self($results, $entityManager, $batchSize);
     }
 
@@ -80,7 +64,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
 
                 if (is_array($value)) {
                     $firstKey = key($value);
-                    if ($firstKey !== null && is_object($value[$firstKey]) && [$firstKey => $value[$firstKey]] === $value) {
+                    if ($firstKey !== null && is_object($value[$firstKey]) && $value === [$firstKey => $value[$firstKey]]) {
                         yield $key => $this->reFetchObject($value[$firstKey]);
 
                         $this->flushAndClearBatch($iteration);
@@ -99,7 +83,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
 
                 $this->flushAndClearBatch($iteration);
             }
-        } catch (\Exception $exception) {
+        } catch (Throwable $exception) {
             $this->entityManager->rollback();
 
             throw $exception;
@@ -111,10 +95,6 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
 
     /**
      * BatchIteratorAggregate constructor (private by design: use a named constructor instead).
-     *
-     * @param Traversable            $resultSet
-     * @param EntityManagerInterface $entityManager
-     * @param int                    $batchSize
      */
     private function __construct(Traversable $resultSet, EntityManagerInterface $entityManager, int $batchSize)
     {
@@ -123,12 +103,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         $this->batchSize     = $batchSize;
     }
 
-    /**
-     * @param object $object
-     *
-     * @return object
-     */
-    private function reFetchObject($object)
+    private function reFetchObject(object $object) : object
     {
         $metadata   = $this->entityManager->getClassMetadata(get_class($object));
         $freshValue = $this->entityManager->find($metadata->getName(), $metadata->getIdentifierValues($object));
@@ -140,12 +115,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         return $freshValue;
     }
 
-    /**
-     * @param int $iteration
-     *
-     * @return void
-     */
-    private function flushAndClearBatch($iteration)
+    private function flushAndClearBatch(int $iteration) : void
     {
         if ($iteration % $this->batchSize) {
             return;
@@ -154,10 +124,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         $this->flushAndClearEntityManager();
     }
 
-    /**
-     * @return void
-     */
-    private function flushAndClearEntityManager()
+    private function flushAndClearEntityManager() : void
     {
         $this->entityManager->flush();
         $this->entityManager->clear();
