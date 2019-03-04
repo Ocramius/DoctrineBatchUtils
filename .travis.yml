@@ -20,4 +20,5 @@ script:
   - ./vendor/bin/phpunit --coverage-clover ./clover.xml
   - php examples/persisting-new-objects-in-batch.php > /dev/null
   - php examples/working-with-query-resultsets-in-batch.php > /dev/null
+  - ./vendor/bin/phpcs
   - ulimit -n 4096 && phpdbg -qrr ./vendor/bin/infection -vvv --min-msi=92 --min-covered-msi=100
