@@ -33,7 +33,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * @param object[] $results
+     * @param mixed[] $results
      */
     public static function fromArrayResult(array $results, EntityManagerInterface $entityManager, int $batchSize) : self
     {
