@@ -22,4 +22,4 @@ script:
   - ./vendor/bin/psalm
   - ./vendor/bin/phpstan analyse
   - ulimit -n 4096 && phpdbg -qrr ./vendor/bin/infection -vvv --min-msi=91 --min-covered-msi=100
-  - ./vendor/bin/roave-backward-compatibility-check
+#  - ./vendor/bin/roave-backward-compatibility-check
