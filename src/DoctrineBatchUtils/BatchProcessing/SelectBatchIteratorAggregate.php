@@ -9,14 +9,18 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use IteratorAggregate;
-use Throwable;
 use Traversable;
 use function get_class;
 use function is_array;
 use function is_object;
 use function key;
 
-final class SimpleBatchIteratorAggregate implements IteratorAggregate
+/**
+ * 'Read' focused batching iterator that will issue a clear to the entity manager
+ * every batch size to 'detach' the managed objects and therefore make them entities only for the
+ * purpose of reading without manually attaching them back to the EntityManager.
+ */
+final class SelectBatchIteratorAggregate implements IteratorAggregate
 {
     /** @var Traversable */
     private $resultSet;
@@ -35,8 +39,11 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     /**
      * @param mixed[] $results
      */
-    public static function fromArrayResult(array $results, EntityManagerInterface $entityManager, int $batchSize) : self
-    {
+    public static function fromArrayResult(
+        array $results,
+        EntityManagerInterface $entityManager,
+        int $batchSize
+    ) : self {
         return new self(new ArrayIterator($results), $entityManager, $batchSize);
     }
 
@@ -56,41 +63,32 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         $iteration = 0;
         $resultSet = $this->resultSet;
 
-        $this->entityManager->beginTransaction();
+        foreach ($resultSet as $key => $value) {
+            $iteration += 1;
 
-        try {
-            foreach ($resultSet as $key => $value) {
-                $iteration += 1;
+            if (is_array($value)) {
+                $firstKey = key($value);
+                if ($firstKey !== null && is_object($value[$firstKey]) && $value === [$firstKey => $value[$firstKey]]) {
+                    yield $key => $this->reFetchObject($value[$firstKey]);
 
-                if (is_array($value)) {
-                    $firstKey = key($value);
-                    if ($firstKey !== null && is_object($value[$firstKey]) && $value === [$firstKey => $value[$firstKey]]) {
-                        yield $key => $this->reFetchObject($value[$firstKey]);
-
-                        $this->flushAndClearBatch($iteration);
-                        continue;
-                    }
-                }
-
-                if (! is_object($value)) {
-                    yield $key => $value;
-
-                    $this->flushAndClearBatch($iteration);
+                    $this->clearBatch($iteration);
                     continue;
                 }
-
-                yield $key => $this->reFetchObject($value);
-
-                $this->flushAndClearBatch($iteration);
             }
-        } catch (Throwable $exception) {
-            $this->entityManager->rollback();
 
-            throw $exception;
+            if (! is_object($value)) {
+                yield $key => $value;
+
+                $this->clearBatch($iteration);
+                continue;
+            }
+
+            yield $key => $this->reFetchObject($value);
+
+            $this->clearBatch($iteration);
         }
 
-        $this->flushAndClearEntityManager();
-        $this->entityManager->commit();
+        $this->entityManager->clear();
     }
 
     /**
@@ -115,18 +113,12 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         return $freshValue;
     }
 
-    private function flushAndClearBatch(int $iteration) : void
+    private function clearBatch(int $iteration) : void
     {
         if ($iteration % $this->batchSize) {
             return;
         }
 
-        $this->flushAndClearEntityManager();
-    }
-
-    private function flushAndClearEntityManager() : void
-    {
-        $this->entityManager->flush();
         $this->entityManager->clear();
     }
 }
