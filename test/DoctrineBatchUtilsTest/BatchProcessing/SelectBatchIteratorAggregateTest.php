@@ -9,8 +9,8 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use DoctrineBatchUtils\BatchProcessing\SelectBatchIteratorAggregate;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use stdClass;
 use UnexpectedValueException;
 use function array_fill;
@@ -21,19 +21,19 @@ use function count;
  */
 final class SelectBatchIteratorAggregateTest extends TestCase
 {
-    /** @var AbstractQuery|PHPUnit_Framework_MockObject_MockObject */
+    /** @var AbstractQuery|MockObject */
     private $query;
 
-    /** @var EntityManagerInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var EntityManagerInterface|MockObject */
     private $entityManager;
 
-    /** @var ClassMetadata|PHPUnit_Framework_MockObject_MockObject */
+    /** @var ClassMetadata|MockObject */
     private $metadata;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->query         = $this->createMock(AbstractQuery::class);
         $this->entityManager = $this->createMock(EntityManagerInterface::class);

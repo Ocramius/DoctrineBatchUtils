@@ -2,4 +2,5 @@ vendor
 composer.phar
 composer.lock
 clover.xml
+.phpunit.result.cache
 infectionlog.txt
