@@ -2,7 +2,7 @@ set -x
 
 IGNORE_PLATFORM_REQUIREMENTS=""
 
-if [ "$TRAVIS_PHP_VERSION" = 'nightly' ]; then
+if [ "$TRAVIS_PHP_VERSION" = 'nightly' ] || [ "$TRAVIS_PHP_VERSION" = '7.4snapshot' ]; then
     IGNORE_PLATFORM_REQUIREMENTS="--ignore-platform-reqs"
 fi
 

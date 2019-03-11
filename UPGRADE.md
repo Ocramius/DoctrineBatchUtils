@@ -22,3 +22,11 @@ foreach ($iterable as $record) {
     ...
 }
 ```
+
+- The parameter `$batchSize` of `DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate::fromQuery()` changed from no type to a non-contravariant int
+- The parameter `$batchSize` of `DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate::fromArrayResult()` changed from no type to a non-contravariant int
+- The parameter `$batchSize` of `DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate::fromTraversableResult()` changed from no type to a non-contravariant int
+- The return type of `DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException::fromInvalidReference()` changed from no type to `DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException`
+- The parameter `$object` of `DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException::fromInvalidReference()` changed from no type to a non-contravariant object
+- The parameter `$object` of `DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException::fromInvalidReference()` changed from no type to object
+ 
