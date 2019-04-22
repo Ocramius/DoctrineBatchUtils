@@ -23,7 +23,7 @@
         "doctrine/common": "^2.10.0"
     },
     "require-dev": {
-        "doctrine/coding-standard": "^5.0.1",
+        "doctrine/coding-standard": "^6.0.0",
         "infection/infection": "^0.12.2",
         "phpstan/phpstan": "^0.11.2",
         "phpstan/phpstan-phpunit": "^0.11.0",
