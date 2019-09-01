@@ -27,7 +27,7 @@
         "infection/infection": "^0.13.4",
         "phpstan/phpstan": "^0.11.15",
         "phpstan/phpstan-phpunit": "^0.11.2",
-        "phpunit/phpunit": "^8.2.5",
+        "phpunit/phpunit": "^8.3.4",
         "roave/backward-compatibility-check": "^4.0",
         "vimeo/psalm": "^3.4.12"
     },
