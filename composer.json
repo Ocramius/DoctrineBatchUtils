@@ -20,7 +20,7 @@
     "require": {
         "php":             "^7.3.0",
         "doctrine/orm":    "^2.7.2",
-        "doctrine/common": "^2.12.0"
+        "doctrine/common": "^2.12.0 | ^3.0"
     },
     "require-dev": {
         "doctrine/coding-standard": "^7.0.2",
