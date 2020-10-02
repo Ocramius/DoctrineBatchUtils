@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineBatchUtils\BatchProcessing\Exception;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use UnexpectedValueException;
 use function get_class;
 use function json_encode;
