@@ -6,6 +6,7 @@ namespace DoctrineBatchUtils\BatchProcessing\Exception;
 
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use UnexpectedValueException;
+
 use function get_class;
 use function json_encode;
 use function spl_object_hash;
@@ -16,7 +17,7 @@ use function sprintf;
  */
 class MissingBatchItemException extends UnexpectedValueException implements ExceptionInterface
 {
-    public static function fromInvalidReference(ClassMetadata $metadata, object $object) : MissingBatchItemException
+    public static function fromInvalidReference(ClassMetadata $metadata, object $object): MissingBatchItemException
     {
         return new self(sprintf(
             'Requested batch item %s#%s (of type %s) with identifier "%s" could not be found',

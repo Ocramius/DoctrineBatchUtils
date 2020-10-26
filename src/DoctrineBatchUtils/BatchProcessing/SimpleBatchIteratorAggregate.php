@@ -11,6 +11,7 @@ use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use IteratorAggregate;
 use Throwable;
 use Traversable;
+
 use function get_class;
 use function is_array;
 use function is_object;
@@ -18,7 +19,7 @@ use function key;
 
 final class SimpleBatchIteratorAggregate implements IteratorAggregate
 {
-    /** @var Traversable */
+    /** @var Traversable<mixed> */
     private $resultSet;
 
     /** @var EntityManagerInterface */
@@ -27,7 +28,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     /** @var int */
     private $batchSize;
 
-    public static function fromQuery(AbstractQuery $query, int $batchSize) : self
+    public static function fromQuery(AbstractQuery $query, int $batchSize): self
     {
         return new self($query->iterate(), $query->getEntityManager(), $batchSize);
     }
@@ -35,23 +36,26 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     /**
      * @param mixed[] $results
      */
-    public static function fromArrayResult(array $results, EntityManagerInterface $entityManager, int $batchSize) : self
+    public static function fromArrayResult(array $results, EntityManagerInterface $entityManager, int $batchSize): self
     {
         return new self(new ArrayIterator($results), $entityManager, $batchSize);
     }
 
+    /**
+     * @param Traversable<mixed> $results
+     */
     public static function fromTraversableResult(
         Traversable $results,
         EntityManagerInterface $entityManager,
         int $batchSize
-    ) : self {
+    ): self {
         return new self($results, $entityManager, $batchSize);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getIterator() : iterable
+    public function getIterator(): iterable
     {
         $iteration = 0;
         $resultSet = $this->resultSet;
@@ -95,6 +99,8 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
 
     /**
      * BatchIteratorAggregate constructor (private by design: use a named constructor instead).
+     *
+     * @param Traversable<mixed> $resultSet
      */
     private function __construct(Traversable $resultSet, EntityManagerInterface $entityManager, int $batchSize)
     {
@@ -103,7 +109,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         $this->batchSize     = $batchSize;
     }
 
-    private function reFetchObject(object $object) : object
+    private function reFetchObject(object $object): object
     {
         $metadata   = $this->entityManager->getClassMetadata(get_class($object));
         $freshValue = $this->entityManager->find($metadata->getName(), $metadata->getIdentifierValues($object));
@@ -115,7 +121,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         return $freshValue;
     }
 
-    private function flushAndClearBatch(int $iteration) : void
+    private function flushAndClearBatch(int $iteration): void
     {
         if ($iteration % $this->batchSize) {
             return;
@@ -124,7 +130,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         $this->flushAndClearEntityManager();
     }
 
-    private function flushAndClearEntityManager() : void
+    private function flushAndClearEntityManager(): void
     {
         $this->entityManager->flush();
         $this->entityManager->clear();

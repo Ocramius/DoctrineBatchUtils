@@ -10,6 +10,7 @@ use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use UnexpectedValueException;
+
 use function spl_object_hash;
 
 /**
@@ -17,7 +18,7 @@ use function spl_object_hash;
  */
 final class MissingBatchItemExceptionTest extends TestCase
 {
-    public function testFromInvalidReference() : void
+    public function testFromInvalidReference(): void
     {
         $object   = new stdClass();
         $metadata = $this->createMock(ClassMetadata::class);
