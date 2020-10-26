@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DoctrineBatchUtilsTest\BatchProcessing;
 
 use ArrayIterator;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use DoctrineBatchUtils\BatchProcessing\SelectBatchIteratorAggregate;

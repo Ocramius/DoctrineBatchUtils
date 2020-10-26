@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineBatchUtilsTest\BatchProcessing\Exception;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\Exception\ExceptionInterface;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use PHPUnit\Framework\TestCase;
