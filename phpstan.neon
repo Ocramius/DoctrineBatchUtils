@@ -3,6 +3,8 @@ parameters:
     paths:
         - src
         - test
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
 
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
