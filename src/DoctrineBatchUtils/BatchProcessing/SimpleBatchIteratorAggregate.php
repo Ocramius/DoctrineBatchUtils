@@ -112,7 +112,9 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     private function reFetchObject(object $object): object
     {
         $metadata   = $this->entityManager->getClassMetadata(get_class($object));
-        $freshValue = $this->entityManager->find($metadata->getName(), $metadata->getIdentifierValues($object));
+        /** @psalm-var class-string $classname */
+        $classname = $metadata->getName();
+        $freshValue = $this->entityManager->find($classname, $metadata->getIdentifierValues($object));
 
         if (! $freshValue) {
             throw MissingBatchItemException::fromInvalidReference($metadata, $object);
