@@ -29,7 +29,7 @@
         "phpstan/phpstan-phpunit": "^0.12.16",
         "phpunit/phpunit": "^9.2.6",
         "roave/backward-compatibility-check": "^4.4",
-        "vimeo/psalm": "^4.0.1"
+        "vimeo/psalm": "^4.1.0"
     },
     "autoload": {
         "psr-4": {
