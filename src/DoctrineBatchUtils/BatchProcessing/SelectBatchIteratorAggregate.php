@@ -24,13 +24,9 @@ use function key;
 final class SelectBatchIteratorAggregate implements IteratorAggregate
 {
     /** @var Traversable<mixed> */
-    private $resultSet;
-
-    /** @var EntityManagerInterface */
-    private $entityManager;
-
-    /** @var int */
-    private $batchSize;
+    private Traversable $resultSet;
+    private EntityManagerInterface $entityManager;
+    private int $batchSize;
 
     public static function fromQuery(AbstractQuery $query, int $batchSize): self
     {

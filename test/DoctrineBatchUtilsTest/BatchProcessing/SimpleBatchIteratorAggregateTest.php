@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
+use DoctrineBatchUtilsTest\MockEntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -34,9 +35,15 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->query         = $this->createMock(AbstractQuery::class);
-        $this->entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager       = $this->getMockBuilder(MockEntityManager::class);
+        $entityManager       = $entityManager->disableOriginalConstructor();
+        $entityManager       = $entityManager->onlyMethods(['getClassMetadata', 'find']);
+        $entityManager       = $entityManager->disableOriginalClone();
+        $entityManager       = $entityManager->disableArgumentCloning();
+        $entityManager       = $entityManager->disallowMockingUnknownTypes();
+        $this->entityManager = $entityManager->getMock();
         $this->metadata      = $this->createMock(ClassMetadata::class);
+        $this->query         = $this->createMock(AbstractQuery::class);
 
         $this->query->expects(self::any())->method('getEntityManager')->willReturn($this->entityManager);
         $this->entityManager->expects(self::any())->method('getClassMetadata')->willReturn($this->metadata);
@@ -75,22 +82,21 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     {
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult([], $this->entityManager, 100);
 
-        $this->entityManager->expects(self::at(0))->method('beginTransaction');
-        $this->entityManager->expects(self::at(1))->method('flush');
-        $this->entityManager->expects(self::at(2))->method('clear');
-        $this->entityManager->expects(self::at(3))->method('commit');
+        $this->expectOutputString("beginTransaction\nflush\nclear\ncommit\n");
 
         foreach ($iterator as $key => $value) {
             throw new UnexpectedValueException('Iterator should have been empty!');
         }
     }
 
+    /**
+     * @uses \DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException
+     */
     public function testIterationRollsBackOnMissingItems(): void
     {
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult([new stdClass()], $this->entityManager, 100);
 
-        $this->entityManager->expects(self::at(0))->method('beginTransaction');
-        $this->entityManager->expects(self::at(1))->method('rollback');
+        $this->expectOutputString("beginTransaction\nrollback\n");
 
         $this->expectException(MissingBatchItemException::class);
 
@@ -106,10 +112,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult($items, $this->entityManager, 100);
 
         $this->entityManager->expects(self::never())->method('find');
-        $this->entityManager->expects(self::at(0))->method('beginTransaction');
-        $this->entityManager->expects(self::at(1))->method('flush');
-        $this->entityManager->expects(self::at(2))->method('clear');
-        $this->entityManager->expects(self::at(3))->method('commit');
+
+        $this->expectOutputString("beginTransaction\nflush\nclear\ncommit\n");
 
         $iteratedObjects = [];
 
@@ -135,10 +139,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
             ['Yadda', ['id' => 123], $freshObjects['foo']],
             ['Yadda', ['id' => 456], $freshObjects['bar']],
         ]);
-        $this->entityManager->expects(self::at(0))->method('beginTransaction');
-        $this->entityManager->expects(self::at(1))->method('flush');
-        $this->entityManager->expects(self::at(2))->method('clear');
-        $this->entityManager->expects(self::at(3))->method('commit');
+
+        $this->expectOutputString("beginTransaction\nflush\nclear\ncommit\n");
 
         $iteratedObjects = [];
 
@@ -203,12 +205,10 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
                 ['Yadda', ['id' => 456], $freshObjects[1]],
             ]
         );
-        $this->entityManager->expects(self::at(0))->method('beginTransaction');
-        $this->entityManager->expects(self::at(1))->method('flush');
-        $this->entityManager->expects(self::at(2))->method('clear');
-        $this->entityManager->expects(self::at(3))->method('commit');
 
         $iteratedObjects = [];
+
+        $this->expectOutputString("beginTransaction\nflush\nclear\ncommit\n");
 
         foreach ($iterator as $key => $value) {
             $iteratedObjects[$key] = $value;
@@ -232,10 +232,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
 
         $this->entityManager->expects(self::never())->method('find');
-        $this->entityManager->expects(self::at(0))->method('beginTransaction');
-        $this->entityManager->expects(self::at(1))->method('flush');
-        $this->entityManager->expects(self::at(2))->method('clear');
-        $this->entityManager->expects(self::at(3))->method('commit');
+        $this->expectOutputString("beginTransaction\nflush\nclear\ncommit\n");
 
         $iteratedObjects = [];
 
@@ -249,7 +246,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     /**
      * @dataProvider iterationFlushesProvider
      */
-    public function testIterationFlushesAtGivenBatchSizes(int $resultItemsCount, int $batchSize, int $expectedFlushesCount): void
+    public function testIterationFlushesAtGivenBatchSizes(int $resultItemsCount, int $batchSize, string $expectOutputString): void
     {
         $object = new stdClass();
 
@@ -261,8 +258,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
 
         $this->metadata->expects(self::any())->method('getIdentifierValues')->willReturn(['id' => 123]);
         $this->entityManager->expects(self::exactly($resultItemsCount))->method('find')->willReturn($object);
-        $this->entityManager->expects(self::exactly($expectedFlushesCount))->method('flush');
-        $this->entityManager->expects(self::exactly($expectedFlushesCount))->method('clear');
+
+        $this->expectOutputString($expectOutputString);
 
         $iteratedObjects = [];
 
@@ -274,15 +271,15 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     }
 
     /**
-     * @return int[][]
+     * @return array<int, array<int, int|string>>
      */
     public function iterationFlushesProvider(): array
     {
         return [
-            [10, 5, 3],
-            [2, 1, 3],
-            [15, 5, 4],
-            [10, 2, 6],
+            [10, 5, "beginTransaction\nflush\nclear\nflush\nclear\nflush\nclear\ncommit\n"],
+            [2, 1, "beginTransaction\nflush\nclear\nflush\nclear\nflush\nclear\ncommit\n"],
+            [15, 5, "beginTransaction\nflush\nclear\nflush\nclear\nflush\nclear\nflush\nclear\ncommit\n"],
+            [10, 2, "beginTransaction\nflush\nclear\nflush\nclear\nflush\nclear\nflush\nclear\nflush\nclear\nflush\nclear\ncommit\n"],
         ];
     }
 }
