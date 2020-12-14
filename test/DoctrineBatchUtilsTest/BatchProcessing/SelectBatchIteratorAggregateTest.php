@@ -9,8 +9,10 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\SelectBatchIteratorAggregate;
+use DoctrineBatchUtilsTest\MockEntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use stdClass;
 use UnexpectedValueException;
 
@@ -105,17 +107,65 @@ final class SelectBatchIteratorAggregateTest extends TestCase
         $originalObjects = ['foo' => new stdClass(), 'bar' => new stdClass()];
         $freshObjects    = ['foo' => new stdClass(), 'bar' => new stdClass()];
 
-        $iterator = SelectBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
+        $query         = $this->createMock(AbstractQuery::class);
+        $metadata      = $this->createMock(ClassMetadata::class);
+        $entityManager = new class ($metadata, $freshObjects) extends MockEntityManager {
+            private ClassMetadata $classMetadata;
+            /** @var mixed[] */
+            private array $freshObjects;
+            private int $atFind;
 
-        $this->metadata->expects(self::any())->method('getIdentifierValues')->willReturnMap([
+            /** @param mixed[] $freshObjects */
+            public function __construct(ClassMetadata $classMetadata, array $freshObjects)
+            {
+                $this->classMetadata = $classMetadata;
+                $this->freshObjects  = $freshObjects;
+                $this->atFind        = 0;
+            }
+
+            /** @inheritDoc */
+            public function getClassMetadata($className)
+            {
+                echo __FUNCTION__ . "\n";
+
+                return $this->classMetadata;
+            }
+
+            /** @inheritDoc */
+            public function find($className, $id)
+            {
+                echo __FUNCTION__ . "\n";
+                $this->atFind++;
+
+                if ($this->atFind === 1) {
+                    TestCase::assertSame('Yadda', $className);
+
+                    TestCase::assertSame(['id' => 123], $id);
+
+                    return $this->freshObjects['foo'];
+                }
+
+                if ($this->atFind === 2) {
+                    TestCase::assertSame('Yadda', $className);
+
+                    TestCase::assertSame(['id' => 456], $id);
+
+                    return $this->freshObjects['bar'];
+                }
+
+                throw new RuntimeException('should not be call more than twice');
+            }
+        };
+
+        $query->expects(self::any())->method('getEntityManager')->willReturn($entityManager);
+        $metadata->expects(self::any())->method('getName')->willReturn('Yadda');
+        $metadata->expects(self::any())->method('getIdentifierValues')->willReturnMap([
             [$originalObjects['foo'], ['id' => 123]],
             [$originalObjects['bar'], ['id' => 456]],
         ]);
-        $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap([
-            ['Yadda', ['id' => 123], $freshObjects['foo']],
-            ['Yadda', ['id' => 456], $freshObjects['bar']],
-        ]);
-        $this->entityManager->expects(self::at(2))->method('clear');
+        $iterator = SelectBatchIteratorAggregate::fromArrayResult($originalObjects, $entityManager, 100);
+
+        $this->expectOutputString("getClassMetadata\nfind\ngetClassMetadata\nfind\nclear\n");
 
         $iteratedObjects = [];
 
@@ -180,7 +230,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
                 ['Yadda', ['id' => 456], $freshObjects[1]],
             ]
         );
-        $this->entityManager->expects(self::at(2))->method('clear');
+        $this->entityManager->expects(self::once())->method('clear');
 
         $iteratedObjects = [];
 

@@ -10,14 +10,13 @@
     beStrictAboutChangesToGlobalState="true"
     beStrictAboutTestsThatDoNotTestAnything="true"
     beStrictAboutResourceUsageDuringSmallTests="true"
-    beStrictAboutCoversAnnotation="true"
->
-    <testsuite name="DoctrineBatchUtils tests">
-        <directory>./test/DoctrineBatchUtilsTest</directory>
-    </testsuite>
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
+    beStrictAboutCoversAnnotation="true">
+  <coverage includeUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </coverage>
+  <testsuite name="DoctrineBatchUtils tests">
+    <directory>./test/DoctrineBatchUtilsTest</directory>
+  </testsuite>
 </phpunit>

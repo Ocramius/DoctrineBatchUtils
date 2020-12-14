@@ -3,6 +3,8 @@ parameters:
     paths:
         - src
         - test
+    excludes_analyse:
+        - test/DoctrineBatchUtilsTest/MockEntityManager.php
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
 
