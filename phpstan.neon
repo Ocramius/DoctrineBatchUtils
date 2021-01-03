@@ -1,12 +1,7 @@
 parameters:
-    level: 7
+    level: 8
     paths:
         - src
-        - test
-    excludes_analyse:
-        - test/DoctrineBatchUtilsTest/MockEntityManager.php
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
 
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
