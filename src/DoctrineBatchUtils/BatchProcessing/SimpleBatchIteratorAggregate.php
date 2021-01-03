@@ -17,12 +17,12 @@ use function is_object;
 use function key;
 
 /**
- * @template A
- * @template B
+ * @template TKey
+ * @template TValue
  */
 final class SimpleBatchIteratorAggregate implements IteratorAggregate
 {
-    /** @var iterable<A, B> */
+    /** @var iterable<TKey, TValue> */
     private iterable $resultSet;
     private EntityManagerInterface $entityManager;
     /** @psalm-var positive-int */
@@ -39,9 +39,10 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     /**
      * @param array<C, D> $results
      *
+     * @return self<C, D>
+     *
      * @template C
      * @template D
-     *
      * @psalm-param positive-int $batchSize
      */
     public static function fromArrayResult(array $results, EntityManagerInterface $entityManager, int $batchSize): self
@@ -52,9 +53,10 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     /**
      * @param Traversable<E, F> $results
      *
+     * @return self<E, F>
+     *
      * @template E
      * @template F
-     *
      * @psalm-param positive-int $batchSize
      */
     public static function fromTraversableResult(
@@ -66,7 +68,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * @return Traversable<A, B|mixed>
+     * @return Traversable<TKey, TValue>
      */
     public function getIterator(): iterable
     {
@@ -113,7 +115,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     /**
      * BatchIteratorAggregate constructor (private by design: use a named constructor instead).
      *
-     * @param iterable<A, B> $resultSet
+     * @param iterable<TKey, TValue> $resultSet
      *
      * @psalm-param positive-int $batchSize
      */
@@ -124,6 +126,10 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         $this->batchSize     = $batchSize;
     }
 
+    /**
+     * @psalm-assert TValue $object
+     * @return object of TValue
+     */
     private function reFetchObject(object $object): object
     {
         $metadata = $this->entityManager->getClassMetadata(get_class($object));

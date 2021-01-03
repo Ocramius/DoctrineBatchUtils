@@ -20,12 +20,12 @@ use function key;
  * every batch size to 'detach' the managed objects and therefore make them entities only for the
  * purpose of reading without manually attaching them back to the EntityManager.
  *
- * @template A
- * @template B
+ * @template TKey
+ * @template TValue
  */
 final class SelectBatchIteratorAggregate implements IteratorAggregate
 {
-    /** @var iterable<A, B> */
+    /** @var iterable<TKey, TValue> */
     private iterable $resultSet;
     private EntityManagerInterface $entityManager;
     /** @psalm-var positive-int */
@@ -42,9 +42,10 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
     /**
      * @param array<C, D> $results
      *
+     * @return self<C, D>
+     *
      * @template C
      * @template D
-     *
      * @psalm-param positive-int $batchSize
      */
     public static function fromArrayResult(
@@ -56,11 +57,12 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * @param Traversable<E, F> $results
+     * @param self<E, F> $results
+     *
+     * @return self<E, F>
      *
      * @template E
      * @template F
-     *
      * @psalm-param positive-int $batchSize
      */
     public static function fromTraversableResult(
@@ -72,7 +74,7 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * @return Traversable<A, B|mixed>
+     * @return Traversable<TKey, TValue>
      */
     public function getIterator(): iterable
     {
@@ -110,7 +112,7 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
     /**
      * BatchIteratorAggregate constructor (private by design: use a named constructor instead).
      *
-     * @param iterable<A, B> $resultSet
+     * @param iterable<TKey, TValue> $resultSet
      *
      * @psalm-param positive-int $batchSize
      */
@@ -121,6 +123,10 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
         $this->batchSize     = $batchSize;
     }
 
+    /**
+     * @psalm-assert TValue $object
+     * @return object of TValue
+     */
     private function reFetchObject(object $object): object
     {
         $metadata = $this->entityManager->getClassMetadata(get_class($object));
