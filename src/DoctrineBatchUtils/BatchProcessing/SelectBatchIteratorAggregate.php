@@ -22,6 +22,7 @@ use function key;
  *
  * @template TKey
  * @template TValue
+ * @implements IteratorAggregate<TKey, TValue>
  */
 final class SelectBatchIteratorAggregate implements IteratorAggregate
 {
@@ -124,8 +125,9 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * @psalm-assert TValue $object
      * @return object of TValue
+     *
+     * @psalm-assert TValue $object
      */
     private function reFetchObject(object $object): object
     {
