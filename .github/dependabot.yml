@@ -1,0 +1,25 @@
+version: 2
+updates:
+- package-ecosystem: composer
+  directory: "/"
+  schedule:
+    interval: monthly
+    time: "04:00"
+  open-pull-requests-limit: 10
+  reviewers:
+  - PReimers
+  assignees:
+  - PReimers
+  labels:
+  - dependencies
+  versioning-strategy: increase
+  allow:
+  - dependency-type: direct
+  - dependency-type: indirect
+  ignore:
+  - dependency-name: symfony/finder
+    versions:
+    - 5.2.2
+  - dependency-name: symfony/console
+    versions:
+    - 5.2.2
