@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9b4d8614cafdaed8192404d080149ae",
+    "content-hash": "9432a877063a79b52204735acea4f6b2",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -2414,16 +2414,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.21.2",
+            "version": "0.21.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "c7d3d6ee744e8520e44a4590ac4bb2419e813f1e"
+                "reference": "cee1ab77f755c9faa8e5b75ba720125037942c80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/c7d3d6ee744e8520e44a4590ac4bb2419e813f1e",
-                "reference": "c7d3d6ee744e8520e44a4590ac4bb2419e813f1e",
+                "url": "https://api.github.com/repos/infection/infection/zipball/cee1ab77f755c9faa8e5b75ba720125037942c80",
+                "reference": "cee1ab77f755c9faa8e5b75ba720125037942c80",
                 "shasum": ""
             },
             "require": {
@@ -2531,7 +2531,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-02-25T21:09:10+00:00"
+            "time": "2021-03-31T11:40:44+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -4961,16 +4961,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.2.3",
+            "version": "v5.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "262d033b57c73e8b59cd6e68a45c528318b15038"
+                "reference": "8c86a82f51658188119e62cff0a050a12d09836f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/262d033b57c73e8b59cd6e68a45c528318b15038",
-                "reference": "262d033b57c73e8b59cd6e68a45c528318b15038",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/8c86a82f51658188119e62cff0a050a12d09836f",
+                "reference": "8c86a82f51658188119e62cff0a050a12d09836f",
                 "shasum": ""
             },
             "require": {
@@ -5016,7 +5016,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-27T10:01:46+00:00"
+            "time": "2021-03-28T14:30:26+00:00"
         },
         {
             "name": "symfony/finder",
@@ -5078,7 +5078,7 @@
         },
         {
             "name": "symfony/process",
-            "version": "v5.2.3",
+            "version": "v5.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
