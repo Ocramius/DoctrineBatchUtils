@@ -26,7 +26,7 @@
         "doctrine/coding-standard": "^9.0.0",
         "infection/infection": "^0.21.5",
         "phpstan/phpstan": "^0.12.88",
-        "phpstan/phpstan-phpunit": "^0.12.18",
+        "phpstan/phpstan-phpunit": "^0.12.19",
         "phpunit/phpunit": "^9.5",
         "vimeo/psalm": "^4.7.3"
     },
