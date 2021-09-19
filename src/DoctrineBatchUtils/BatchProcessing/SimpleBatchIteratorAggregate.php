@@ -79,6 +79,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         $this->entityManager->beginTransaction();
 
         try {
+            /** @psalm-var TValue|array<TValue> $value */
             foreach ($resultSet as $key => $value) {
                 $iteration += 1;
 
@@ -128,9 +129,9 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * @return object of TValue
+     * @psalm-param TValue&object $object
      *
-     * @psalm-assert TValue $object
+     * @psalm-return TValue
      */
     private function reFetchObject(object $object): object
     {

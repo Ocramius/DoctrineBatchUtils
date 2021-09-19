@@ -82,6 +82,7 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
         $iteration = 0;
         $resultSet = $this->resultSet;
 
+        /** @psalm-var TValue|array<TValue> $value */
         foreach ($resultSet as $key => $value) {
             $iteration += 1;
 
@@ -125,9 +126,9 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * @return object of TValue
+     * @psalm-param TValue&object $object
      *
-     * @psalm-assert TValue $object
+     * @psalm-return TValue
      */
     private function reFetchObject(object $object): object
     {
