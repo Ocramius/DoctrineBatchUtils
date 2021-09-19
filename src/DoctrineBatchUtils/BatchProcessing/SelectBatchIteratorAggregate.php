@@ -42,12 +42,12 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
 
     /**
      * @param array<C, D> $results
+     * @psalm-param positive-int $batchSize
      *
      * @return self<C, D>
      *
      * @template C
      * @template D
-     * @psalm-param positive-int $batchSize
      */
     public static function fromArrayResult(
         array $results,
@@ -59,12 +59,12 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
 
     /**
      * @param self<E, F> $results
+     * @psalm-param positive-int $batchSize
      *
      * @return self<E, F>
      *
      * @template E
      * @template F
-     * @psalm-param positive-int $batchSize
      */
     public static function fromTraversableResult(
         Traversable $results,
@@ -115,7 +115,6 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
      * BatchIteratorAggregate constructor (private by design: use a named constructor instead).
      *
      * @param iterable<TKey, TValue> $resultSet
-     *
      * @psalm-param positive-int $batchSize
      */
     private function __construct(iterable $resultSet, EntityManagerInterface $entityManager, int $batchSize)
@@ -132,7 +131,7 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
      */
     private function reFetchObject(object $object): object
     {
-        $metadata = $this->entityManager->getClassMetadata(get_class($object));
+        $metadata   = $this->entityManager->getClassMetadata(get_class($object));
         $classname  = $metadata->getName();
         $freshValue = $this->entityManager->find($classname, $metadata->getIdentifierValues($object));
 

@@ -268,8 +268,9 @@ final class SelectBatchIteratorAggregateTest extends TestCase
     }
 
     /**
-     * @dataProvider iterationClearsProvider
      * @psalm-param positive-int $batchSize
+     *
+     * @dataProvider iterationClearsProvider
      */
     public function testIterationClearsAtGivenBatchSizes(int $resultItemsCount, int $batchSize, int $expectedClearsCount): void
     {

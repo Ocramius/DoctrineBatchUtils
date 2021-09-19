@@ -244,8 +244,9 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     }
 
     /**
-     * @dataProvider iterationFlushesProvider
      * @psalm-param positive-int $batchSize
+     *
+     * @dataProvider iterationFlushesProvider
      */
     public function testIterationFlushesAtGivenBatchSizes(int $resultItemsCount, int $batchSize, string $expectOutputString): void
     {
