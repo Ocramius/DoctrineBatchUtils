@@ -71,6 +71,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     /**
      * @return Traversable<TKey, TValue>
      */
+    #[\ReturnTypeWillChange]
     public function getIterator(): iterable
     {
         $iteration = 0;
