@@ -1,7 +1,0 @@
-parameters:
-    level: 8
-    paths:
-        - src
-
-includes:
-    - vendor/phpstan/phpstan-phpunit/extension.neon
