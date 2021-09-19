@@ -8,6 +8,7 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use IteratorAggregate;
+use ReturnTypeWillChange;
 use Throwable;
 use Traversable;
 
@@ -71,6 +72,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     /**
      * @return Traversable<TKey, TValue>
      */
+    #[ReturnTypeWillChange]
     public function getIterator(): iterable
     {
         $iteration = 0;
