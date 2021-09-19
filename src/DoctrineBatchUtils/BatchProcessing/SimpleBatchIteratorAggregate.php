@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DoctrineBatchUtils\BatchProcessing;
 
-use ArrayIterator;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
@@ -17,28 +16,49 @@ use function is_array;
 use function is_object;
 use function key;
 
+/**
+ * @template TKey
+ * @template TValue
+ * @implements IteratorAggregate<TKey, TValue>
+ */
 final class SimpleBatchIteratorAggregate implements IteratorAggregate
 {
-    /** @var Traversable<mixed> */
-    private Traversable $resultSet;
+    /** @var iterable<TKey, TValue> */
+    private iterable $resultSet;
     private EntityManagerInterface $entityManager;
+    /** @psalm-var positive-int */
     private int $batchSize;
 
+    /**
+     * @psalm-param positive-int $batchSize
+     */
     public static function fromQuery(AbstractQuery $query, int $batchSize): self
     {
-        return new self($query->iterate(), $query->getEntityManager(), $batchSize);
+        return new self($query->toIterable(), $query->getEntityManager(), $batchSize);
     }
 
     /**
-     * @param mixed[] $results
+     * @param array<C, D> $results
+     * @psalm-param positive-int $batchSize
+     *
+     * @return self<C, D>
+     *
+     * @template C
+     * @template D
      */
     public static function fromArrayResult(array $results, EntityManagerInterface $entityManager, int $batchSize): self
     {
-        return new self(new ArrayIterator($results), $entityManager, $batchSize);
+        return new self($results, $entityManager, $batchSize);
     }
 
     /**
-     * @param Traversable<mixed> $results
+     * @param Traversable<E, F> $results
+     * @psalm-param positive-int $batchSize
+     *
+     * @return self<E, F>
+     *
+     * @template E
+     * @template F
      */
     public static function fromTraversableResult(
         Traversable $results,
@@ -49,7 +69,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * {@inheritDoc}
+     * @return Traversable<TKey, TValue>
      */
     public function getIterator(): iterable
     {
@@ -59,6 +79,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         $this->entityManager->beginTransaction();
 
         try {
+            /** @psalm-var TValue|array<TValue> $value */
             foreach ($resultSet as $key => $value) {
                 $iteration += 1;
 
@@ -96,19 +117,24 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     /**
      * BatchIteratorAggregate constructor (private by design: use a named constructor instead).
      *
-     * @param Traversable<mixed> $resultSet
+     * @param iterable<TKey, TValue> $resultSet
+     * @psalm-param positive-int $batchSize
      */
-    private function __construct(Traversable $resultSet, EntityManagerInterface $entityManager, int $batchSize)
+    private function __construct(iterable $resultSet, EntityManagerInterface $entityManager, int $batchSize)
     {
         $this->resultSet     = $resultSet;
         $this->entityManager = $entityManager;
         $this->batchSize     = $batchSize;
     }
 
+    /**
+     * @psalm-param TValue&object $object
+     *
+     * @psalm-return TValue
+     */
     private function reFetchObject(object $object): object
     {
-        $metadata = $this->entityManager->getClassMetadata(get_class($object));
-        /** @psalm-var class-string $classname */
+        $metadata   = $this->entityManager->getClassMetadata(get_class($object));
         $classname  = $metadata->getName();
         $freshValue = $this->entityManager->find($classname, $metadata->getIdentifierValues($object));
 

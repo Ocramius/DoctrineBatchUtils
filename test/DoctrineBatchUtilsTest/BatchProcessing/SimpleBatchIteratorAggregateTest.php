@@ -54,7 +54,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
 
     public function testFromQuery(): void
     {
-        $this->query->expects(self::any())->method('iterate')->willReturn(new ArrayIterator());
+        $this->query->expects(self::any())->method('toIterable')->willReturn(new ArrayIterator());
 
         self::assertInstanceOf(
             SimpleBatchIteratorAggregate::class,
@@ -170,7 +170,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $originalObjects = [[new stdClass()], [new stdClass()]];
         $freshObjects    = [new stdClass(), new stdClass()];
 
-        $this->query->method('iterate')->willReturn(new ArrayIterator($originalObjects));
+        $this->query->method('toIterable')->willReturn(new ArrayIterator($originalObjects));
         $iterator = SimpleBatchIteratorAggregate::fromQuery($this->query, 100);
 
         $this->assertSuccessfulReFetchesInNestedIterableResult($iterator, $originalObjects, $freshObjects);
@@ -181,7 +181,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $originalObjects = [[new stdClass()], [new stdClass()]];
         $freshObjects    = [new stdClass(), new stdClass()];
 
-        $this->query->method('iterate')->willReturn(new ArrayIterator($originalObjects));
+        $this->query->method('toIterable')->willReturn(new ArrayIterator($originalObjects));
         $iterator = SimpleBatchIteratorAggregate::fromTraversableResult(new ArrayIterator($originalObjects), $this->entityManager, 100);
 
         $this->assertSuccessfulReFetchesInNestedIterableResult($iterator, $originalObjects, $freshObjects);
@@ -244,6 +244,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     }
 
     /**
+     * @psalm-param positive-int $batchSize
+     *
      * @dataProvider iterationFlushesProvider
      */
     public function testIterationFlushesAtGivenBatchSizes(int $resultItemsCount, int $batchSize, string $expectOutputString): void
