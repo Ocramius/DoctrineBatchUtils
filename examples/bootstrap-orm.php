@@ -10,6 +10,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/entity/MyEntity.php';
 
+
 /**
  * @return EntityManager
  */
@@ -24,7 +25,7 @@ return function () {
 
     $entityManager = EntityManager::create(
         [
-            'driverClass' => \Doctrine\DBAL\Driver\PDOSqlite\Driver::class,
+            'driverClass' => \Doctrine\DBAL\Driver\PDO\SQLite\Driver::class,
             'memory'      => true,
         ],
         $configuration
