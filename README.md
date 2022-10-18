@@ -9,7 +9,7 @@ This repository is maintained by [Patrick Reimers (PReimers)](https://github.com
 
 [![License](https://img.shields.io/packagist/l/ocramius/doctrine-batch-utils.svg)](https://github.com/Ocramius/DoctrineBatchUtils/blob/master/LICENSE)
 [![Current release](https://img.shields.io/packagist/v/ocramius/doctrine-batch-utils.svg)](https://packagist.org/packages/ocramius/doctrine-batch-utils)
-[![Travis-CI build status](https://img.shields.io/travis/Ocramius/DoctrineBatchUtils.svg)](https://travis-ci.org/Ocramius/DoctrineBatchUtils)
+[![Build Status](https://github.com/Ocramius/DoctrineBatchUtils/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/Ocramius/DoctrineBatchUtils/actions/workflows/continuous-integration.yml)
 
 ## Installation
 
