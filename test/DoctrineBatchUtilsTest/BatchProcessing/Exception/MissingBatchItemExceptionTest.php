@@ -13,9 +13,7 @@ use UnexpectedValueException;
 
 use function spl_object_hash;
 
-/**
- * @covers \DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException
- */
+/** @covers \DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException */
 final class MissingBatchItemExceptionTest extends TestCase
 {
     public function testFromInvalidReference(): void
@@ -36,7 +34,7 @@ final class MissingBatchItemExceptionTest extends TestCase
             'Requested batch item stdClass#'
             . spl_object_hash($object)
             . ' (of type Foo) with identifier "{"abc":"def"}" could not be found',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
     }
 }

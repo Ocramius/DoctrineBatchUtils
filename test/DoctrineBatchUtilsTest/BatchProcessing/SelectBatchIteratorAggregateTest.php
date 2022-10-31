@@ -19,9 +19,7 @@ use UnexpectedValueException;
 use function array_fill;
 use function count;
 
-/**
- * @covers \DoctrineBatchUtils\BatchProcessing\SelectBatchIteratorAggregate
- */
+/** @covers \DoctrineBatchUtils\BatchProcessing\SelectBatchIteratorAggregate */
 final class SelectBatchIteratorAggregateTest extends TestCase
 {
     /** @var AbstractQuery|MockObject */
@@ -53,7 +51,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
 
         self::assertInstanceOf(
             SelectBatchIteratorAggregate::class,
-            SelectBatchIteratorAggregate::fromQuery($this->query, 100)
+            SelectBatchIteratorAggregate::fromQuery($this->query, 100),
         );
     }
 
@@ -61,7 +59,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
     {
         self::assertInstanceOf(
             SelectBatchIteratorAggregate::class,
-            SelectBatchIteratorAggregate::fromArrayResult([], $this->entityManager, 100)
+            SelectBatchIteratorAggregate::fromArrayResult([], $this->entityManager, 100),
         );
     }
 
@@ -69,7 +67,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
     {
         self::assertInstanceOf(
             SelectBatchIteratorAggregate::class,
-            SelectBatchIteratorAggregate::fromTraversableResult(new ArrayIterator([]), $this->entityManager, 100)
+            SelectBatchIteratorAggregate::fromTraversableResult(new ArrayIterator([]), $this->entityManager, 100),
         );
     }
 
@@ -222,13 +220,13 @@ final class SelectBatchIteratorAggregateTest extends TestCase
             [
                 [$originalObjects[0][0], ['id' => 123]],
                 [$originalObjects[1][0], ['id' => 456]],
-            ]
+            ],
         );
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap(
             [
                 ['Yadda', ['id' => 123], $freshObjects[0]],
                 ['Yadda', ['id' => 456], $freshObjects[1]],
-            ]
+            ],
         );
         $this->entityManager->expects(self::once())->method('clear');
 
@@ -279,7 +277,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
         $iterator = SelectBatchIteratorAggregate::fromArrayResult(
             array_fill(0, $resultItemsCount, $object),
             $this->entityManager,
-            $batchSize
+            $batchSize,
         );
 
         $this->metadata->expects(self::any())->method('getIdentifierValues')->willReturn(['id' => 123]);
@@ -295,9 +293,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
         $this->assertCount($resultItemsCount, $iteratedObjects);
     }
 
-    /**
-     * @return int[][]
-     */
+    /** @return int[][] */
     public function iterationClearsProvider(): array
     {
         return [

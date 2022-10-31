@@ -33,9 +33,7 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
     /** @psalm-var positive-int */
     private int $batchSize;
 
-    /**
-     * @psalm-param positive-int $batchSize
-     */
+    /** @psalm-param positive-int $batchSize */
     public static function fromQuery(AbstractQuery $query, int $batchSize): self
     {
         return new self($query->toIterable(), $query->getEntityManager(), $batchSize);
@@ -75,9 +73,7 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
         return new self($results, $entityManager, $batchSize);
     }
 
-    /**
-     * @return Traversable<TKey, TValue>
-     */
+    /** @return Traversable<TKey, TValue> */
     #[ReturnTypeWillChange]
     public function getIterator(): iterable
     {
