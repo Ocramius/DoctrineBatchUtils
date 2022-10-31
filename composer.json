@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php":                  "^7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0",
+        "php":                  "~8.1.0 || ~8.2.0",
         "doctrine/orm":         "^2.9.5",
         "doctrine/persistence": "^2.2.2 || ^3.0.2"
     },
@@ -44,6 +44,9 @@
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "infection/extension-installer": true
+        },
+        "platform": {
+            "php": "8.1.99"
         }
     }
 }
