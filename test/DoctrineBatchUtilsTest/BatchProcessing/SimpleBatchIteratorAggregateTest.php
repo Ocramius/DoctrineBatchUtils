@@ -19,9 +19,7 @@ use UnexpectedValueException;
 use function array_fill;
 use function count;
 
-/**
- * @covers \DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate
- */
+/** @covers \DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate */
 final class SimpleBatchIteratorAggregateTest extends TestCase
 {
     /** @var AbstractQuery|MockObject */
@@ -58,7 +56,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
 
         self::assertInstanceOf(
             SimpleBatchIteratorAggregate::class,
-            SimpleBatchIteratorAggregate::fromQuery($this->query, 100)
+            SimpleBatchIteratorAggregate::fromQuery($this->query, 100),
         );
     }
 
@@ -66,7 +64,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     {
         self::assertInstanceOf(
             SimpleBatchIteratorAggregate::class,
-            SimpleBatchIteratorAggregate::fromArrayResult([], $this->entityManager, 100)
+            SimpleBatchIteratorAggregate::fromArrayResult([], $this->entityManager, 100),
         );
     }
 
@@ -74,7 +72,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     {
         self::assertInstanceOf(
             SimpleBatchIteratorAggregate::class,
-            SimpleBatchIteratorAggregate::fromTraversableResult(new ArrayIterator([]), $this->entityManager, 100)
+            SimpleBatchIteratorAggregate::fromTraversableResult(new ArrayIterator([]), $this->entityManager, 100),
         );
     }
 
@@ -89,9 +87,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         }
     }
 
-    /**
-     * @uses \DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException
-     */
+    /** @uses \DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException */
     public function testIterationRollsBackOnMissingItems(): void
     {
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult([new stdClass()], $this->entityManager, 100);
@@ -197,13 +193,13 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
             [
                 [$originalObjects[0][0], ['id' => 123]],
                 [$originalObjects[1][0], ['id' => 456]],
-            ]
+            ],
         );
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap(
             [
                 ['Yadda', ['id' => 123], $freshObjects[0]],
                 ['Yadda', ['id' => 456], $freshObjects[1]],
-            ]
+            ],
         );
 
         $iteratedObjects = [];
@@ -255,7 +251,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult(
             array_fill(0, $resultItemsCount, $object),
             $this->entityManager,
-            $batchSize
+            $batchSize,
         );
 
         $this->metadata->expects(self::any())->method('getIdentifierValues')->willReturn(['id' => 123]);
@@ -272,9 +268,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $this->assertCount($resultItemsCount, $iteratedObjects);
     }
 
-    /**
-     * @return array<int, array<int, int|string>>
-     */
+    /** @return array<int, array<int, int|string>> */
     public function iterationFlushesProvider(): array
     {
         return [

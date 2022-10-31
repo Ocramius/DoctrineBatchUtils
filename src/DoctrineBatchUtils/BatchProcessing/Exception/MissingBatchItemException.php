@@ -24,7 +24,7 @@ class MissingBatchItemException extends UnexpectedValueException implements Exce
             get_class($object),
             spl_object_hash($object),
             $metadata->getName(),
-            json_encode($metadata->getIdentifierValues($object))
+            json_encode($metadata->getIdentifierValues($object)),
         ));
     }
 }
