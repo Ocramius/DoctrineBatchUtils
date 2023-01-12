@@ -28,7 +28,7 @@
         "phpunit/phpunit": "^9.5.27",
         "vimeo/psalm": "^5.4.0",
         "doctrine/annotations" : "^1.14.2",
-        "doctrine/dbal" : "^3.5.2"
+        "doctrine/dbal" : "^3.5.3"
     },
     "autoload": {
         "psr-4": {
