@@ -25,10 +25,10 @@
     "require-dev": {
         "doctrine/coding-standard": "^11.1.0",
         "roave/infection-static-analysis-plugin": "^1.29.0",
-        "phpunit/phpunit": "^9.6.6",
+        "phpunit/phpunit": "^9.6.7",
         "vimeo/psalm": "^5.9.0",
         "doctrine/annotations" : "^1.14.3",
-        "doctrine/dbal" : "^3.6.1"
+        "doctrine/dbal" : "^3.6.2"
     },
     "autoload": {
         "psr-4": {
