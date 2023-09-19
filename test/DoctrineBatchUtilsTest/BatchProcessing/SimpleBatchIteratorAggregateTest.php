@@ -269,7 +269,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     }
 
     /** @return array<int, array<int, int|string>> */
-    public function iterationFlushesProvider(): array
+    public static function iterationFlushesProvider(): array
     {
         return [
             [10, 5, "beginTransaction\nflush\nclear\nflush\nclear\nflush\nclear\ncommit\n"],

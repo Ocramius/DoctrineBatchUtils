@@ -1,22 +1,21 @@
 <?xml version="1.0"?>
-<phpunit
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-    bootstrap="./vendor/autoload.php"
+<phpunit 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd" 
+    bootstrap="./vendor/autoload.php" 
     colors="true"
-    verbose="true"
-    beStrictAboutTodoAnnotatedTests="true"
-    beStrictAboutOutputDuringTests="true"
-    beStrictAboutChangesToGlobalState="true"
-    beStrictAboutTestsThatDoNotTestAnything="true"
-    beStrictAboutResourceUsageDuringSmallTests="true"
-    beStrictAboutCoversAnnotation="true">
-  <coverage includeUncoveredFiles="true">
-    <include>
-      <directory suffix=".php">./src</directory>
-    </include>
-  </coverage>
+    beStrictAboutOutputDuringTests="true" 
+    beStrictAboutChangesToGlobalState="true" 
+    beStrictAboutTestsThatDoNotTestAnything="true" 
+    cacheDirectory=".phpunit.cache" 
+    beStrictAboutCoverageMetadata="true">
+  <coverage includeUncoveredFiles="true"/>
   <testsuite name="DoctrineBatchUtils tests">
     <directory>./test/DoctrineBatchUtilsTest</directory>
   </testsuite>
+  <source>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </source>
 </phpunit>

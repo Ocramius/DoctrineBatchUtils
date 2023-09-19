@@ -294,7 +294,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
     }
 
     /** @return int[][] */
-    public function iterationClearsProvider(): array
+    public static function iterationClearsProvider(): array
     {
         return [
             [10, 5, 3],
