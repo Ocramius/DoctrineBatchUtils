@@ -27,7 +27,7 @@
         "roave/infection-static-analysis-plugin": "^1.33",
         "phpunit/phpunit": "^10.4.2",
         "vimeo/psalm": "^5.15",
-        "doctrine/annotations" : "^1.14.3",
+        "doctrine/annotations" : "^2.0.1",
         "doctrine/dbal" : "^3.7.1"
     },
     "autoload": {

@@ -8,7 +8,8 @@
     beStrictAboutChangesToGlobalState="true" 
     beStrictAboutTestsThatDoNotTestAnything="true" 
     cacheDirectory=".phpunit.cache" 
-    beStrictAboutCoverageMetadata="true">
+    beStrictAboutCoverageMetadata="true"
+    executionOrder="random">
   <coverage includeUncoveredFiles="true"/>
   <testsuite name="DoctrineBatchUtils tests">
     <directory>./test/DoctrineBatchUtilsTest</directory>
