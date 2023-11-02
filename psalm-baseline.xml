@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352">
+  <file src="src/DoctrineBatchUtils/BatchProcessing/SelectBatchIteratorAggregate.php">
+    <MixedArgument>
+      <code>$object::class</code>
+    </MixedArgument>
+    <MixedArgumentTypeCoercion>
+      <code>$object</code>
+      <code>$object</code>
+    </MixedArgumentTypeCoercion>
+  </file>
+  <file src="src/DoctrineBatchUtils/BatchProcessing/SimpleBatchIteratorAggregate.php">
+    <MixedArgument>
+      <code>$object::class</code>
+    </MixedArgument>
+    <MixedArgumentTypeCoercion>
+      <code>$object</code>
+      <code>$object</code>
+    </MixedArgumentTypeCoercion>
+  </file>
+</files>

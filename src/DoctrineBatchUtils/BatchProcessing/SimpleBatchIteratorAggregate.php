@@ -12,7 +12,6 @@ use ReturnTypeWillChange;
 use Throwable;
 use Traversable;
 
-use function get_class;
 use function is_array;
 use function is_object;
 use function key;
@@ -132,7 +131,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
      */
     private function reFetchObject(object $object): object
     {
-        $metadata   = $this->entityManager->getClassMetadata(get_class($object));
+        $metadata   = $this->entityManager->getClassMetadata($object::class);
         $classname  = $metadata->getName();
         $freshValue = $this->entityManager->find($classname, $metadata->getIdentifierValues($object));
 
