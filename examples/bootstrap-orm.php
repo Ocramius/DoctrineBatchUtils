@@ -15,7 +15,6 @@ require_once __DIR__ . '/entity/MyEntity.php';
  * @return EntityManager
  */
 return function () {
-    AnnotationRegistry::registerLoader('class_exists');
     $configuration = new Configuration();
 
     $configuration->setMetadataDriverImpl(new AnnotationDriver(new AnnotationReader(), [__DIR__ . '/entity']));
