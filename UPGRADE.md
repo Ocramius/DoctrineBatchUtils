@@ -2,7 +2,7 @@
 
 ## 2.0.0
 
-**BC Breaks**
+### BC Breaks
 
 Access to the actual entity has changed. In previous versions the entity could be accessed via `[0]` on result item like this:
 
@@ -15,7 +15,7 @@ foreach ($iterable as $record) {
 ```
 
 That was rather confusing and unexpected so it is no longer wrapped in array and `[0]` acessor must be dropped:
- 
+
 ```php
 foreach ($iterable as $record) {
     $entity = $record;
@@ -29,4 +29,3 @@ foreach ($iterable as $record) {
 - The return type of `DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException::fromInvalidReference()` changed from no type to `DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException`
 - The parameter `$object` of `DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException::fromInvalidReference()` changed from no type to a non-contravariant object
 - The parameter `$object` of `DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException::fromInvalidReference()` changed from no type to object
- 
