@@ -9,7 +9,11 @@ use Doctrine\ORM\Query\ResultSetMapping;
 
 class MockEntityManager implements EntityManagerInterface
 {
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     * @psalm-suppress InvalidReturnType this method is only to be used when mocked by PHPUnit.
+     *                                   PHPUnit will dynamically create a returned metadata item
+     */
     public function getClassMetadata($className)
     {
         echo __FUNCTION__ . "\n";
@@ -179,14 +183,7 @@ class MockEntityManager implements EntityManagerInterface
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
-    public function merge($object): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    /** @inheritDoc */
-    public function clear($objectName = null): void
+    public function clear(): void
     {
         echo __FUNCTION__ . "\n";
     }
@@ -219,20 +216,17 @@ class MockEntityManager implements EntityManagerInterface
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
-    public function initializeObject($obj): void
+    public function initializeObject(object $obj): void
     {
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
-    public function contains($object): void
+    public function contains(object $object): void
     {
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
-    public function __call($name, $arguments): void
+    public function __call(string $name, mixed $arguments): void
     {
         echo __FUNCTION__ . "\n";
     }

@@ -11,6 +11,7 @@ use Doctrine\Persistence\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
 use DoctrineBatchUtilsTest\MockEntityManager;
+use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -22,37 +23,41 @@ use function count;
 /** @covers \DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate */
 final class SimpleBatchIteratorAggregateTest extends TestCase
 {
-    /** @var AbstractQuery|MockObject */
-    private $query;
+    /** @var AbstractQuery&MockObject */
+    private AbstractQuery $query;
 
-    /** @var EntityManagerInterface|MockObject */
-    private $entityManager;
+    /** @var EntityManagerInterface&MockObject */
+    private EntityManagerInterface $entityManager;
 
-    /** @var ClassMetadata|MockObject */
-    private $metadata;
+    /** @var ClassMetadata&MockObject */
+    private ClassMetadata $metadata;
 
     protected function setUp(): void
     {
-        $entityManager       = $this->getMockBuilder(MockEntityManager::class);
-        $entityManager       = $entityManager->disableOriginalConstructor();
-        $entityManager       = $entityManager->onlyMethods(['getClassMetadata', 'find']);
-        $entityManager       = $entityManager->disableOriginalClone();
-        $entityManager       = $entityManager->disableArgumentCloning();
-        $entityManager       = $entityManager->disallowMockingUnknownTypes();
-        $this->entityManager = $entityManager->getMock();
         $this->metadata      = $this->createMock(ClassMetadata::class);
         $this->query         = $this->createMock(AbstractQuery::class);
+        $this->entityManager = $this->getMockBuilder(MockEntityManager::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->onlyMethods(['getClassMetadata', 'find'])
+            ->getMock();
 
-        $this->query->expects(self::any())->method('getEntityManager')->willReturn($this->entityManager);
-        $this->entityManager->expects(self::any())->method('getClassMetadata')->willReturn($this->metadata);
-        $this->metadata->expects(self::any())->method('getName')->willReturn('Yadda');
+        $this->query->method('getEntityManager')->willReturn($this->entityManager);
+        $this->metadata->method('getName')->willReturn('Yadda');
+
+        /** @psalm-var InvocationMocker $classMetadataCall nudging psalm to understand this particular mocked call */
+        $classMetadataCall = $this->entityManager->method('getClassMetadata');
+
+        $classMetadataCall->willReturn($this->metadata);
 
         parent::setUp();
     }
 
     public function testFromQuery(): void
     {
-        $this->query->expects(self::any())->method('toIterable')->willReturn(new ArrayIterator());
+        $this->query->method('toIterable')->willReturn(new ArrayIterator());
 
         self::assertInstanceOf(
             SimpleBatchIteratorAggregate::class,
@@ -127,13 +132,13 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
 
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
 
-        $this->metadata->expects(self::any())->method('getIdentifierValues')->willReturnMap([
+        $this->metadata->method('getIdentifierValues')->willReturnMap([
             [$originalObjects['foo'], ['id' => 123]],
             [$originalObjects['bar'], ['id' => 456]],
         ]);
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap([
-            ['Yadda', ['id' => 123], $freshObjects['foo']],
-            ['Yadda', ['id' => 456], $freshObjects['bar']],
+            [stdClass::class, ['id' => 123], $freshObjects['foo']],
+            [stdClass::class, ['id' => 456], $freshObjects['bar']],
         ]);
 
         $this->expectOutputString("beginTransaction\nflush\nclear\ncommit\n");
@@ -197,8 +202,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         );
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap(
             [
-                ['Yadda', ['id' => 123], $freshObjects[0]],
-                ['Yadda', ['id' => 456], $freshObjects[1]],
+                [stdClass::class, ['id' => 123], $freshObjects[0]],
+                [stdClass::class, ['id' => 456], $freshObjects[1]],
             ],
         );
 
@@ -254,7 +259,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
             $batchSize,
         );
 
-        $this->metadata->expects(self::any())->method('getIdentifierValues')->willReturn(['id' => 123]);
+        $this->metadata->method('getIdentifierValues')->willReturn(['id' => 123]);
         $this->entityManager->expects(self::exactly($resultItemsCount))->method('find')->willReturn($object);
 
         $this->expectOutputString($expectOutputString);
@@ -268,7 +273,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $this->assertCount($resultItemsCount, $iteratedObjects);
     }
 
-    /** @return array<int, array<int, int|string>> */
+    /** @return non-empty-list<array{int<1, max>, int<1, max>, non-empty-string}> */
     public function iterationFlushesProvider(): array
     {
         return [

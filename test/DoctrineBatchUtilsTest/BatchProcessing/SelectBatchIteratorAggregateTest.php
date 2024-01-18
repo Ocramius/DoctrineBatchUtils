@@ -22,14 +22,14 @@ use function count;
 /** @covers \DoctrineBatchUtils\BatchProcessing\SelectBatchIteratorAggregate */
 final class SelectBatchIteratorAggregateTest extends TestCase
 {
-    /** @var AbstractQuery|MockObject */
-    private $query;
+    /** @var AbstractQuery&MockObject */
+    private AbstractQuery $query;
 
-    /** @var EntityManagerInterface|MockObject */
-    private $entityManager;
+    /** @var EntityManagerInterface&MockObject */
+    private EntityManagerInterface $entityManager;
 
-    /** @var ClassMetadata|MockObject */
-    private $metadata;
+    /** @var ClassMetadata&MockObject */
+    private ClassMetadata $metadata;
 
     protected function setUp(): void
     {
@@ -38,16 +38,16 @@ final class SelectBatchIteratorAggregateTest extends TestCase
         $this->metadata      = $this->createMock(ClassMetadata::class);
 
         $this->entityManager->expects(self::never())->method('flush');
-        $this->query->expects(self::any())->method('getEntityManager')->willReturn($this->entityManager);
-        $this->entityManager->expects(self::any())->method('getClassMetadata')->willReturn($this->metadata);
-        $this->metadata->expects(self::any())->method('getName')->willReturn('Yadda');
+        $this->query->method('getEntityManager')->willReturn($this->entityManager);
+        $this->entityManager->method('getClassMetadata')->willReturn($this->metadata);
+        $this->metadata->method('getName')->willReturn('Yadda');
 
         parent::setUp();
     }
 
     public function testFromQuery(): void
     {
-        $this->query->expects(self::any())->method('toIterable')->willReturn(new ArrayIterator());
+        $this->query->method('toIterable')->willReturn(new ArrayIterator());
 
         self::assertInstanceOf(
             SelectBatchIteratorAggregate::class,
@@ -109,11 +109,11 @@ final class SelectBatchIteratorAggregateTest extends TestCase
         $metadata      = $this->createMock(ClassMetadata::class);
         $entityManager = new class ($metadata, $freshObjects) extends MockEntityManager {
             private ClassMetadata $classMetadata;
-            /** @var mixed[] */
+            /** @var array<non-empty-string, object> */
             private array $freshObjects;
             private int $atFind;
 
-            /** @param mixed[] $freshObjects */
+            /** @param array<non-empty-string, object> $freshObjects */
             public function __construct(ClassMetadata $classMetadata, array $freshObjects)
             {
                 $this->classMetadata = $classMetadata;
@@ -121,12 +121,22 @@ final class SelectBatchIteratorAggregateTest extends TestCase
                 $this->atFind        = 0;
             }
 
-            /** @inheritDoc */
+            /**
+             * @param string|class-string<TRequested> $className
+             *
+             * @return \Doctrine\ORM\Mapping\ClassMetadata<TRequested>
+             *
+             * @inheritDoc
+             * @template TRequested of object
+             */
             public function getClassMetadata($className)
             {
                 echo __FUNCTION__ . "\n";
 
-                return $this->classMetadata;
+                /** @psalm-var \Doctrine\ORM\Mapping\ClassMetadata<TRequested> $metadata inference not really possible here - all stubs */
+                $metadata = $this->classMetadata;
+
+                return $metadata;
             }
 
             /** @inheritDoc */
@@ -136,28 +146,32 @@ final class SelectBatchIteratorAggregateTest extends TestCase
                 $this->atFind++;
 
                 if ($this->atFind === 1) {
-                    TestCase::assertSame('Yadda', $className);
-
                     TestCase::assertSame(['id' => 123], $id);
 
-                    return $this->freshObjects['foo'];
+                    $freshObject = $this->freshObjects['foo'];
+
+                    TestCase::assertInstanceOf($className, $freshObject);
+
+                    return $freshObject;
                 }
 
                 if ($this->atFind === 2) {
-                    TestCase::assertSame('Yadda', $className);
-
                     TestCase::assertSame(['id' => 456], $id);
 
-                    return $this->freshObjects['bar'];
+                    $freshObject = $this->freshObjects['bar'];
+
+                    TestCase::assertInstanceOf($className, $freshObject);
+
+                    return $freshObject;
                 }
 
                 throw new RuntimeException('should not be call more than twice');
             }
         };
 
-        $query->expects(self::any())->method('getEntityManager')->willReturn($entityManager);
-        $metadata->expects(self::any())->method('getName')->willReturn('Yadda');
-        $metadata->expects(self::any())->method('getIdentifierValues')->willReturnMap([
+        $query->method('getEntityManager')->willReturn($entityManager);
+        $metadata->method('getName')->willReturn('Yadda');
+        $metadata->method('getIdentifierValues')->willReturnMap([
             [$originalObjects['foo'], ['id' => 123]],
             [$originalObjects['bar'], ['id' => 456]],
         ]);
@@ -224,8 +238,8 @@ final class SelectBatchIteratorAggregateTest extends TestCase
         );
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap(
             [
-                ['Yadda', ['id' => 123], $freshObjects[0]],
-                ['Yadda', ['id' => 456], $freshObjects[1]],
+                [stdClass::class, ['id' => 123], $freshObjects[0]],
+                [stdClass::class, ['id' => 456], $freshObjects[1]],
             ],
         );
         $this->entityManager->expects(self::once())->method('clear');
@@ -280,7 +294,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
             $batchSize,
         );
 
-        $this->metadata->expects(self::any())->method('getIdentifierValues')->willReturn(['id' => 123]);
+        $this->metadata->method('getIdentifierValues')->willReturn(['id' => 123]);
         $this->entityManager->expects(self::exactly($resultItemsCount))->method('find')->willReturn($object);
         $this->entityManager->expects(self::exactly($expectedClearsCount))->method('clear');
 
@@ -293,7 +307,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
         $this->assertCount($resultItemsCount, $iteratedObjects);
     }
 
-    /** @return int[][] */
+    /** @return non-empty-list<array{int<1, max>, int<1, max>, int<1, max>}> */
     public function iterationClearsProvider(): array
     {
         return [

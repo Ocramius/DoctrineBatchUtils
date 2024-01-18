@@ -8,7 +8,6 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use IteratorAggregate;
-use ReturnTypeWillChange;
 use Traversable;
 
 use function get_class;
@@ -57,7 +56,7 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * @param self<E, F> $results
+     * @param Traversable<E, F> $results
      * @psalm-param positive-int $batchSize
      *
      * @return self<E, F>
@@ -73,15 +72,17 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
         return new self($results, $entityManager, $batchSize);
     }
 
-    /** @return Traversable<TKey, TValue> */
-    #[ReturnTypeWillChange]
-    public function getIterator(): iterable
+    /**
+     * @return Traversable<TKey, TValue>
+     *
+     * @psalm-suppress InvalidReturnType psalm can't infer the correct key/value pairs here, but we've carefully
+     *                                   tested this signature.
+     */
+    public function getIterator(): Traversable
     {
         $iteration = 0;
-        $resultSet = $this->resultSet;
 
-        /** @psalm-var TValue|array<TValue> $value */
-        foreach ($resultSet as $key => $value) {
+        foreach ($this->resultSet as $key => $value) {
             $iteration += 1;
 
             if (is_array($value)) {
@@ -123,15 +124,17 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * @psalm-param TValue&object $object
+     * @psalm-param TReFetched $object
      *
-     * @psalm-return TValue
+     * @psalm-return TReFetched
+     *
+     * @template TReFetched of object
      */
     private function reFetchObject(object $object): object
     {
-        $metadata   = $this->entityManager->getClassMetadata(get_class($object));
-        $classname  = $metadata->getName();
-        $freshValue = $this->entityManager->find($classname, $metadata->getIdentifierValues($object));
+        $className  = get_class($object);
+        $metadata   = $this->entityManager->getClassMetadata($className);
+        $freshValue = $this->entityManager->find($className, $metadata->getIdentifierValues($object));
 
         if (! $freshValue) {
             throw MissingBatchItemException::fromInvalidReference($metadata, $object);
