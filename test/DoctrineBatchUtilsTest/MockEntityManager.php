@@ -179,7 +179,6 @@ class MockEntityManager implements EntityManagerInterface
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
     public function clear(): void
     {
         echo __FUNCTION__ . "\n";
@@ -213,19 +212,16 @@ class MockEntityManager implements EntityManagerInterface
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
     public function initializeObject(object $obj): void
     {
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
     public function contains(object $object): void
     {
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
     public function __call(string $name, mixed $arguments): void
     {
         echo __FUNCTION__ . "\n";
