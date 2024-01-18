@@ -16,9 +16,6 @@
     </projectFiles>
 
     <issueHandlers>
-
-        <MoreSpecificReturnType errorLevel="info" />
-
         <PossiblyUnusedParam>
             <errorLevel type="suppress">
                 <directory name="test"/>
