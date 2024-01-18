@@ -6,6 +6,7 @@
     xsi:schemaLocation="https://getpsalm.org/schema/config file:///Users/patrick/Projects/DoctrineBatchUtils/vendor/vimeo/psalm/config.xsd"
     findUnusedBaselineEntry="true"
     findUnusedCode="true"
+    findUnusedPsalmSuppress="true"
 >
     <projectFiles>
         <directory name="src" />
