@@ -16,8 +16,6 @@
     </projectFiles>
 
     <issueHandlers>
-        <!-- level 3 issues - slightly lazy code writing, but provably low false-negatives -->
-        <MissingParamType errorLevel="info" />
 
         <MoreSpecificReturnType errorLevel="info" />
         <LessSpecificReturnStatement errorLevel="info" />

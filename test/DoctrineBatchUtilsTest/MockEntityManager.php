@@ -180,13 +180,7 @@ class MockEntityManager implements EntityManagerInterface
     }
 
     /** @inheritDoc */
-    public function merge($object): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    /** @inheritDoc */
-    public function clear($objectName = null): void
+    public function clear(): void
     {
         echo __FUNCTION__ . "\n";
     }
@@ -220,19 +214,19 @@ class MockEntityManager implements EntityManagerInterface
     }
 
     /** @inheritDoc */
-    public function initializeObject($obj): void
+    public function initializeObject(object $obj): void
     {
         echo __FUNCTION__ . "\n";
     }
 
     /** @inheritDoc */
-    public function contains($object): void
+    public function contains(object $object): void
     {
         echo __FUNCTION__ . "\n";
     }
 
     /** @inheritDoc */
-    public function __call($name, $arguments): void
+    public function __call(string $name, mixed $arguments): void
     {
         echo __FUNCTION__ . "\n";
     }
