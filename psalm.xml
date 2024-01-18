@@ -20,8 +20,6 @@
         <MoreSpecificReturnType errorLevel="info" />
         <LessSpecificReturnStatement errorLevel="info" />
 
-        <InvalidReturnStatement errorLevel="info" />
-        
         <PossiblyUnusedParam>
             <errorLevel type="suppress">
                 <directory name="test"/>

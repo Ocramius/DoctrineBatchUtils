@@ -136,19 +136,23 @@ final class SelectBatchIteratorAggregateTest extends TestCase
                 $this->atFind++;
 
                 if ($this->atFind === 1) {
-                    TestCase::assertSame(stdClass::class, $className);
-
                     TestCase::assertSame(['id' => 123], $id);
 
-                    return $this->freshObjects['foo'];
+                    $freshObject = $this->freshObjects['foo'];
+
+                    TestCase::assertInstanceOf($className, $freshObject);
+
+                    return $freshObject;
                 }
 
                 if ($this->atFind === 2) {
-                    TestCase::assertSame(stdClass::class, $className);
-
                     TestCase::assertSame(['id' => 456], $id);
 
-                    return $this->freshObjects['bar'];
+                    $freshObject = $this->freshObjects['bar'];
+
+                    TestCase::assertInstanceOf($className, $freshObject);
+
+                    return $freshObject;
                 }
 
                 throw new RuntimeException('should not be call more than twice');
