@@ -21,7 +21,6 @@
         <LessSpecificReturnStatement errorLevel="info" />
 
         <InvalidReturnStatement errorLevel="info" />
-        <InvalidReturnType errorLevel="info" />
         
         <PossiblyUnusedParam>
             <errorLevel type="suppress">

@@ -136,7 +136,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
                 $this->atFind++;
 
                 if ($this->atFind === 1) {
-                    TestCase::assertSame('Yadda', $className);
+                    TestCase::assertSame(stdClass::class, $className);
 
                     TestCase::assertSame(['id' => 123], $id);
 
@@ -144,7 +144,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
                 }
 
                 if ($this->atFind === 2) {
-                    TestCase::assertSame('Yadda', $className);
+                    TestCase::assertSame(stdClass::class, $className);
 
                     TestCase::assertSame(['id' => 456], $id);
 
@@ -224,8 +224,8 @@ final class SelectBatchIteratorAggregateTest extends TestCase
         );
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap(
             [
-                ['Yadda', ['id' => 123], $freshObjects[0]],
-                ['Yadda', ['id' => 456], $freshObjects[1]],
+                [stdClass::class, ['id' => 123], $freshObjects[0]],
+                [stdClass::class, ['id' => 456], $freshObjects[1]],
             ],
         );
         $this->entityManager->expects(self::once())->method('clear');

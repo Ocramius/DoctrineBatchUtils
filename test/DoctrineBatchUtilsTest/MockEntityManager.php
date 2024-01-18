@@ -9,7 +9,11 @@ use Doctrine\ORM\Query\ResultSetMapping;
 
 class MockEntityManager implements EntityManagerInterface
 {
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     * @psalm-suppress InvalidReturnType this method is only to be used when mocked by PHPUnit.
+     *                                   PHPUnit will dynamically create a returned metadata item
+     */
     public function getClassMetadata($className)
     {
         echo __FUNCTION__ . "\n";
