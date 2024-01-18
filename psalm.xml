@@ -22,7 +22,6 @@
 
         <InvalidReturnStatement errorLevel="info" />
         <InvalidReturnType errorLevel="info" />
-        <InvalidArgument errorLevel="info" />
         
         <PossiblyUnusedParam>
             <errorLevel type="suppress">

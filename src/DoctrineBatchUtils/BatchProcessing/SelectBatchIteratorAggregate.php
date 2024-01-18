@@ -57,7 +57,7 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * @param self<E, F> $results
+     * @param Traversable<E, F> $results
      * @psalm-param positive-int $batchSize
      *
      * @return self<E, F>

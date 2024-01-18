@@ -293,7 +293,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
         $this->assertCount($resultItemsCount, $iteratedObjects);
     }
 
-    /** @return int[][] */
+    /** @return non-empty-list<array{int<1, max>, int<1, max>, int<1, max>}> */
     public function iterationClearsProvider(): array
     {
         return [

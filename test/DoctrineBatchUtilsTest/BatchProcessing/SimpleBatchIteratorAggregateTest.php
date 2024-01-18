@@ -273,7 +273,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $this->assertCount($resultItemsCount, $iteratedObjects);
     }
 
-    /** @return array<int, array<int, int|string>> */
+    /** @return non-empty-list<array{int<1, max>, int<1, max>, non-empty-string}> */
     public function iterationFlushesProvider(): array
     {
         return [
