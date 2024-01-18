@@ -121,12 +121,22 @@ final class SelectBatchIteratorAggregateTest extends TestCase
                 $this->atFind        = 0;
             }
 
-            /** @inheritDoc */
+            /**
+             * @param string|class-string<TRequested> $className
+             *
+             * @return \Doctrine\ORM\Mapping\ClassMetadata<TRequested>
+             *
+             * @inheritDoc
+             * @template TRequested of object
+             */
             public function getClassMetadata($className)
             {
                 echo __FUNCTION__ . "\n";
 
-                return $this->classMetadata;
+                /** @psalm-var \Doctrine\ORM\Mapping\ClassMetadata<TRequested> $metadata inference not really possible here - all stubs */
+                $metadata = $this->classMetadata;
+
+                return $metadata;
             }
 
             /** @inheritDoc */

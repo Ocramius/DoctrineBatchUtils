@@ -18,7 +18,6 @@
     <issueHandlers>
 
         <MoreSpecificReturnType errorLevel="info" />
-        <LessSpecificReturnStatement errorLevel="info" />
 
         <PossiblyUnusedParam>
             <errorLevel type="suppress">
