@@ -4,9 +4,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config file:///Users/patrick/Projects/DoctrineBatchUtils/vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
 >
     <projectFiles>
         <directory name="src" />
+        <directory name="test" />
         <ignoreFiles>
             <directory name="vendor" />
         </ignoreFiles>
@@ -130,6 +133,36 @@
         <InvalidArrayAssignment errorLevel="info" />
         <InvalidArrayAccess errorLevel="info" />
         <InvalidClone errorLevel="info" />
+        
+        <PossiblyUnusedParam>
+            <errorLevel type="suppress">
+                <directory name="test"/>
+            </errorLevel>
+        </PossiblyUnusedParam>
+        <PossiblyUnusedMethod>
+            <errorLevel type="suppress">
+                <directory name="test"/>
+            </errorLevel>
+        </PossiblyUnusedMethod>
+        <UnusedVariable>
+            <errorLevel type="suppress">
+                <directory name="test"/>
+            </errorLevel>
+        </UnusedVariable>
+        <UnusedForeachValue>
+            <errorLevel type="suppress">
+                <directory name="test"/>
+            </errorLevel>
+        </UnusedForeachValue>
+        <NoValue>
+            <errorLevel type="suppress">
+                <directory name="test"/>
+            </errorLevel>
+        </NoValue>
 
     </issueHandlers>
+    
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+    </plugins>
 </psalm>

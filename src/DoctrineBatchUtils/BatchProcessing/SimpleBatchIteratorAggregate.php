@@ -126,9 +126,11 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * @psalm-param TValue&object $object
+     * @psalm-param TReFetched $object
      *
-     * @psalm-return TValue
+     * @psalm-return TReFetched
+     *
+     * @template TReFetched of object
      */
     private function reFetchObject(object $object): object
     {
