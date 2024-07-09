@@ -7,7 +7,7 @@ namespace DoctrineBatchUtilsTest\BatchProcessing;
 use ArrayIterator;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
 use DoctrineBatchUtilsTest\MockEntityManager;
@@ -36,7 +36,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     {
         $this->metadata      = $this->createMock(ClassMetadata::class);
         $this->query         = $this->createMock(AbstractQuery::class);
-        $this->entityManager = $this->getMockBuilder(EntityManagerInterface::class)
+        $this->entityManager = $this->getMockBuilder(MockEntityManager::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
             ->disableArgumentCloning()

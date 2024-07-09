@@ -11,6 +11,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\Cache;
 use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Internal\Hydration\AbstractHydrator;
@@ -29,7 +30,7 @@ class MockEntityManager implements EntityManagerInterface
 {
     private EntityManagerInterface $realEntityManager;
 
-    public function __construct(EntityManagerInterface $realEntityManager)
+    public function __construct(EntityManager $realEntityManager)
     {
         $this->realEntityManager = $realEntityManager;
     }
