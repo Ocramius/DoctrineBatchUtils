@@ -239,8 +239,8 @@ final class SelectBatchIteratorAggregateTest extends TestCase
         );
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap(
             [
-                [stdClass::class, ['id' => 123], $freshObjects[0]],
-                [stdClass::class, ['id' => 456], $freshObjects[1]],
+                [stdClass::class, ['id' => 123], null, null, $freshObjects[0]],
+                [stdClass::class, ['id' => 456], null, null, $freshObjects[1]],
             ],
         );
         $this->entityManager->expects(self::once())->method('clear');

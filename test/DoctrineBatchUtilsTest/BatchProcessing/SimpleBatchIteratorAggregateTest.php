@@ -130,16 +130,17 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $originalObjects = ['foo' => new stdClass(), 'bar' => new stdClass()];
         $freshObjects    = ['foo' => new stdClass(), 'bar' => new stdClass()];
 
-        $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
-
         $this->metadata->method('getIdentifierValues')->willReturnMap([
             [$originalObjects['foo'], ['id' => 123]],
             [$originalObjects['bar'], ['id' => 456]],
         ]);
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap([
-            [stdClass::class, ['id' => 123], $freshObjects['foo']],
-            [stdClass::class, ['id' => 456], $freshObjects['bar']],
+            [stdClass::class, ['id' => 123], null, null, $freshObjects['foo']],
+            [stdClass::class, ['id' => 456], null, null, $freshObjects['bar']],
         ]);
+
+        $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
+
 
         $this->expectOutputString("beginTransaction\nflush\nclear\ncommit\n");
 
@@ -202,8 +203,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         );
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap(
             [
-                [stdClass::class, ['id' => 123], $freshObjects[0]],
-                [stdClass::class, ['id' => 456], $freshObjects[1]],
+                [stdClass::class, ['id' => 123], null, null, $freshObjects[0]],
+                [stdClass::class, ['id' => 456], null, null, $freshObjects[1]],
             ],
         );
 
