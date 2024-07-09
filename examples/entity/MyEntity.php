@@ -2,10 +2,12 @@
 
 use Doctrine\ORM\Mapping as ORM;
 
-/** @ORM\Entity */
+#[ORM\Entity]
 class MyEntity
 {
-    /** @ORM\Id @ORM\GeneratedValue(strategy="NONE") @ORM\Column(type="integer") */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
+    #[ORM\Column(type: "integer")]
     public $id;
 
     public function __construct($id)

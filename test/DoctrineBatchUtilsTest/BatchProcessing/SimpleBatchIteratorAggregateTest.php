@@ -36,7 +36,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     {
         $this->metadata      = $this->createMock(ClassMetadata::class);
         $this->query         = $this->createMock(AbstractQuery::class);
-        $this->entityManager = $this->getMockBuilder(MockEntityManager::class)
+        $this->entityManager = $this->getMockBuilder(EntityManagerInterface::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
             ->disableArgumentCloning()

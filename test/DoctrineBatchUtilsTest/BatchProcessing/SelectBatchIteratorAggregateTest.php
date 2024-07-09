@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace DoctrineBatchUtilsTest\BatchProcessing;
 
 use ArrayIterator;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\SelectBatchIteratorAggregate;
 use DoctrineBatchUtilsTest\MockEntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -129,7 +130,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
              * @inheritDoc
              * @template TRequested of object
              */
-            public function getClassMetadata($className)
+            public function getClassMetadata($className): ClassMetadata
             {
                 echo __FUNCTION__ . "\n";
 
@@ -140,7 +141,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
             }
 
             /** @inheritDoc */
-            public function find($className, $id)
+            public function find(string $className, mixed $id, LockMode|int|null $lockMode = null, int|null $lockVersion = null): object|null
             {
                 echo __FUNCTION__ . "\n";
                 $this->atFind++;
