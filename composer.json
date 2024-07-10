@@ -19,7 +19,7 @@
     ],
     "require": {
         "php":                  "~8.1.0 || ~8.2.0 || ~8.3.0",
-        "doctrine/orm":         "^2.19.6",
+        "doctrine/orm":         "^3.2.1",
         "doctrine/persistence": "^3.3.3"
     },
     "require-dev": {
@@ -27,8 +27,7 @@
         "roave/infection-static-analysis-plugin": "^1.35.0",
         "phpunit/phpunit": "^9.6.19",
         "vimeo/psalm": "^5.25.0",
-        "doctrine/annotations" : "^1.14.3",
-        "doctrine/dbal" : "^3.8.6",
+        "doctrine/dbal" : "^4.0.4",
         "psalm/plugin-phpunit": "^0.19.0"
     },
     "autoload": {

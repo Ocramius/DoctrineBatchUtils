@@ -4,34 +4,74 @@ declare(strict_types=1);
 
 namespace DoctrineBatchUtilsTest;
 
+use DateTimeInterface;
+use Doctrine\Common\EventManager;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\Cache;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Internal\Hydration\AbstractHydrator;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataFactory;
+use Doctrine\ORM\NativeQuery;
+use Doctrine\ORM\Proxy\ProxyFactory;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\Query\FilterCollection;
 use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\UnitOfWork;
 
 class MockEntityManager implements EntityManagerInterface
 {
-    /**
-     * @inheritDoc
-     * @psalm-suppress InvalidReturnType this method is only to be used when mocked by PHPUnit.
-     *                                   PHPUnit will dynamically create a returned metadata item
-     */
-    public function getClassMetadata($className)
+    private EntityManagerInterface $realEntityManager;
+
+    public function __construct(EntityManager $realEntityManager)
+    {
+        $this->realEntityManager = $realEntityManager;
+    }
+
+    public function isUninitializedObject(mixed $value): void
     {
         echo __FUNCTION__ . "\n";
     }
 
-    public function getCache(): void
+    public function getProxyFactory(): ProxyFactory
     {
-        echo __FUNCTION__ . "\n";
+        return $this->realEntityManager->getProxyFactory();
     }
 
-    public function getConnection(): void
+    public function getMetadataFactory(): ClassMetadataFactory
     {
-        echo __FUNCTION__ . "\n";
+        return $this->realEntityManager->getMetadataFactory();
     }
 
-    public function getExpressionBuilder(): void
+    public function getClassMetadata(string $className): ClassMetadata
     {
-        echo __FUNCTION__ . "\n";
+        return $this->realEntityManager->getClassMetadata($className);
+    }
+
+    public function getUnitOfWork(): UnitOfWork
+    {
+        return $this->realEntityManager->getUnitOfWork();
+    }
+
+    public function getCache(): Cache|null
+    {
+        return $this->realEntityManager->getCache();
+    }
+
+    public function getConnection(): Connection
+    {
+        return $this->realEntityManager->getConnection();
+    }
+
+    public function getExpressionBuilder(): Expr
+    {
+        return $this->realEntityManager->getExpressionBuilder();
     }
 
     public function beginTransaction(): void
@@ -39,10 +79,9 @@ class MockEntityManager implements EntityManagerInterface
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
-    public function transactional($func): void
+    public function wrapInTransaction(callable $func): mixed
     {
-        echo __FUNCTION__ . "\n";
+        return $this->realEntityManager->wrapInTransaction($func);
     }
 
     public function commit(): void
@@ -55,45 +94,24 @@ class MockEntityManager implements EntityManagerInterface
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
-    public function createQuery($dql = ''): void
+    public function createQuery(string $dql = ''): Query
     {
-        echo __FUNCTION__ . "\n";
+        return $this->realEntityManager->createQuery($dql);
     }
 
-    /** @inheritDoc */
-    public function createNamedQuery($name): void
+    public function createNativeQuery(string $sql, ResultSetMapping $rsm): NativeQuery
     {
-        echo __FUNCTION__ . "\n";
+        return $this->realEntityManager->createNativeQuery($sql, $rsm);
     }
 
-    /** @inheritDoc */
-    public function createNativeQuery($sql, ResultSetMapping $rsm): void
+    public function createQueryBuilder(): QueryBuilder
     {
-        echo __FUNCTION__ . "\n";
+        return $this->realEntityManager->createQueryBuilder();
     }
 
-    /** @inheritDoc */
-    public function createNamedNativeQuery($name): void
+    public function getReference(string $entityName, mixed $id): object|null
     {
-        echo __FUNCTION__ . "\n";
-    }
-
-    public function createQueryBuilder(): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    /** @inheritDoc */
-    public function getReference($entityName, $id): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    /** @inheritDoc */
-    public function getPartialReference($entityName, $identifier): void
-    {
-        echo __FUNCTION__ . "\n";
+        return $this->realEntityManager->getReference($entityName, $id);
     }
 
     public function close(): void
@@ -101,84 +119,60 @@ class MockEntityManager implements EntityManagerInterface
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
-    public function copy($entity, $deep = false): void
+    public function lock(object $entity, LockMode|int $lockMode, DateTimeInterface|int|null $lockVersion = null): void
     {
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
-    public function lock($entity, $lockMode, $lockVersion = null): void
+    public function getEventManager(): EventManager
+    {
+        return $this->realEntityManager->getEventManager();
+    }
+
+    public function getConfiguration(): Configuration
+    {
+        return $this->realEntityManager->getConfiguration();
+    }
+
+    public function isOpen(): bool
+    {
+        return $this->realEntityManager->isOpen();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function newHydrator($hydrationMode): AbstractHydrator
+    {
+        return $this->realEntityManager->newHydrator($hydrationMode);
+    }
+
+    public function getFilters(): FilterCollection
+    {
+        return $this->realEntityManager->getFilters();
+    }
+
+    public function isFiltersStateClean(): bool
+    {
+        return $this->realEntityManager->isFiltersStateClean();
+    }
+
+    public function hasFilters(): bool
+    {
+        return $this->realEntityManager->hasFilters();
+    }
+
+    public function find(string $className, mixed $id, LockMode|int|null $lockMode = null, int|null $lockVersion = null): object|null
+    {
+        return $this->realEntityManager->find($className, $id, $lockMode, $lockVersion);
+    }
+
+    public function persist(object $object): void
     {
         echo __FUNCTION__ . "\n";
     }
 
-    public function getEventManager(): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    public function getConfiguration(): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    public function isOpen(): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    public function getUnitOfWork(): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    /** @inheritDoc */
-    public function getHydrator($hydrationMode): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    /** @inheritDoc */
-    public function newHydrator($hydrationMode): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    public function getProxyFactory(): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    public function getFilters(): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    public function isFiltersStateClean(): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    public function hasFilters(): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    /** @inheritDoc */
-    public function find($className, $id)
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    /** @inheritDoc */
-    public function persist($object): void
-    {
-        echo __FUNCTION__ . "\n";
-    }
-
-    /** @inheritDoc */
-    public function remove($object): void
+    public function remove(object $object): void
     {
         echo __FUNCTION__ . "\n";
     }
@@ -188,14 +182,12 @@ class MockEntityManager implements EntityManagerInterface
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
-    public function detach($object): void
+    public function detach(object $object): void
     {
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
-    public function refresh($object): void
+    public function refresh(object $object, LockMode|int|null $lockMode = null): void
     {
         echo __FUNCTION__ . "\n";
     }
@@ -205,15 +197,9 @@ class MockEntityManager implements EntityManagerInterface
         echo __FUNCTION__ . "\n";
     }
 
-    /** @inheritDoc */
-    public function getRepository($className): void
+    public function getRepository(string $className): EntityRepository
     {
-        echo __FUNCTION__ . "\n";
-    }
-
-    public function getMetadataFactory(): void
-    {
-        echo __FUNCTION__ . "\n";
+        return $this->realEntityManager->getRepository($className);
     }
 
     public function initializeObject(object $obj): void
@@ -221,13 +207,8 @@ class MockEntityManager implements EntityManagerInterface
         echo __FUNCTION__ . "\n";
     }
 
-    public function contains(object $object): void
+    public function contains(object $object): bool
     {
-        echo __FUNCTION__ . "\n";
-    }
-
-    public function __call(string $name, mixed $arguments): void
-    {
-        echo __FUNCTION__ . "\n";
+        return $this->realEntityManager->contains($object);
     }
 }

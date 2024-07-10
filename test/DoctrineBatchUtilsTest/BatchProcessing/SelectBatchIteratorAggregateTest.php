@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace DoctrineBatchUtilsTest\BatchProcessing;
 
 use ArrayIterator;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\SelectBatchIteratorAggregate;
 use DoctrineBatchUtilsTest\MockEntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -124,23 +125,22 @@ final class SelectBatchIteratorAggregateTest extends TestCase
             /**
              * @param string|class-string<TRequested> $className
              *
-             * @return \Doctrine\ORM\Mapping\ClassMetadata<TRequested>
+             * @return ClassMetadata<TRequested>
              *
              * @inheritDoc
              * @template TRequested of object
              */
-            public function getClassMetadata($className)
+            public function getClassMetadata($className): ClassMetadata
             {
                 echo __FUNCTION__ . "\n";
 
-                /** @psalm-var \Doctrine\ORM\Mapping\ClassMetadata<TRequested> $metadata inference not really possible here - all stubs */
+                /** @psalm-var ClassMetadata<TRequested> $metadata inference not really possible here - all stubs */
                 $metadata = $this->classMetadata;
 
                 return $metadata;
             }
 
-            /** @inheritDoc */
-            public function find($className, $id)
+            public function find(string $className, mixed $id, LockMode|int|null $lockMode = null, int|null $lockVersion = null): object|null
             {
                 echo __FUNCTION__ . "\n";
                 $this->atFind++;
@@ -238,8 +238,8 @@ final class SelectBatchIteratorAggregateTest extends TestCase
         );
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap(
             [
-                [stdClass::class, ['id' => 123], $freshObjects[0]],
-                [stdClass::class, ['id' => 456], $freshObjects[1]],
+                [stdClass::class, ['id' => 123], null, null, $freshObjects[0]],
+                [stdClass::class, ['id' => 456], null, null, $freshObjects[1]],
             ],
         );
         $this->entityManager->expects(self::once())->method('clear');

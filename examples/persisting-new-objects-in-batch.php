@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 use Doctrine\ORM\EntityManager;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
 
-/** @var $entityManager EntityManager */
 $entityManager = call_user_func(require __DIR__ . '/bootstrap-orm.php');
+assert($entityManager instanceof EntityManager);
 
 // Bootstrapping the ORM
-/** @var $iterable int[] */
+/** @var int[] $iterable */
 $iterable = SimpleBatchIteratorAggregate::fromTraversableResult(
-    call_user_func(function () use ($entityManager) {
+    call_user_func(static function () use ($entityManager) {
         for ($i = 0; $i < 10000; $i += 1) {
             $entityManager->persist(new MyEntity($i));
 
@@ -17,7 +19,7 @@ $iterable = SimpleBatchIteratorAggregate::fromTraversableResult(
         }
     }),
     $entityManager,
-    100 // flush/clear after 100 iterations
+    100, // flush/clear after 100 iterations
 );
 
 foreach ($iterable as $record) {

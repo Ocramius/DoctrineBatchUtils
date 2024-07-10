@@ -1,41 +1,34 @@
 <?php
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
+declare(strict_types=1);
+
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
+use Doctrine\ORM\Proxy\ProxyFactory;
 use Doctrine\ORM\Tools\SchemaTool;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/entity/MyEntity.php';
 
-
-/**
- * @return EntityManager
- */
-return function () {
-    AnnotationRegistry::registerLoader('class_exists');
+/** @return EntityManager */
+return static function () {
     $configuration = new Configuration();
 
-    $configuration->setMetadataDriverImpl(new AnnotationDriver(new AnnotationReader(), [__DIR__ . '/entity']));
-    $configuration->setAutoGenerateProxyClasses(\Doctrine\ORM\Proxy\ProxyFactory::AUTOGENERATE_EVAL);
+    $configuration->setMetadataDriverImpl(new AttributeDriver([__DIR__ . '/entity']));
+    $configuration->setAutoGenerateProxyClasses(ProxyFactory::AUTOGENERATE_EVAL);
     $configuration->setProxyNamespace('ORMProxies');
     $configuration->setProxyDir(sys_get_temp_dir());
 
-    $entityManager = EntityManager::create(
-        [
-            'driverClass' => \Doctrine\DBAL\Driver\PDO\SQLite\Driver::class,
-            'memory'      => true,
-        ],
-        $configuration
-    );
+    $connection    = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true], $configuration);
+    $entityManager = new EntityManager($connection, $configuration);
 
     (new SchemaTool($entityManager))
         ->createSchema(
             $entityManager
                 ->getMetadataFactory()
-                ->getAllMetadata()
+                ->getAllMetadata(),
         );
 
     return $entityManager;
