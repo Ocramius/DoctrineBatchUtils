@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
 use DoctrineBatchUtilsTest\MockEntityManager;
-use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -47,7 +46,6 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $this->query->method('getEntityManager')->willReturn($this->entityManager);
         $this->metadata->method('getName')->willReturn('Yadda');
 
-        /** @psalm-var InvocationMocker $classMetadataCall nudging psalm to understand this particular mocked call */
         $classMetadataCall = $this->entityManager->method('getClassMetadata');
 
         $classMetadataCall->willReturn($this->metadata);
@@ -140,7 +138,6 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         ]);
 
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
-
 
         $this->expectOutputString("beginTransaction\nflush\nclear\ncommit\n");
 

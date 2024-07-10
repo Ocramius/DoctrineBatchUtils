@@ -125,7 +125,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
             /**
              * @param string|class-string<TRequested> $className
              *
-             * @return \Doctrine\ORM\Mapping\ClassMetadata<TRequested>
+             * @return ClassMetadata<TRequested>
              *
              * @inheritDoc
              * @template TRequested of object
@@ -134,13 +134,12 @@ final class SelectBatchIteratorAggregateTest extends TestCase
             {
                 echo __FUNCTION__ . "\n";
 
-                /** @psalm-var \Doctrine\ORM\Mapping\ClassMetadata<TRequested> $metadata inference not really possible here - all stubs */
+                /** @psalm-var ClassMetadata<TRequested> $metadata inference not really possible here - all stubs */
                 $metadata = $this->classMetadata;
 
                 return $metadata;
             }
 
-            /** @inheritDoc */
             public function find(string $className, mixed $id, LockMode|int|null $lockMode = null, int|null $lockVersion = null): object|null
             {
                 echo __FUNCTION__ . "\n";

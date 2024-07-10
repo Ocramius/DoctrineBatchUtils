@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DoctrineBatchUtilsTest;
 
-
 use DateTimeInterface;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
@@ -35,19 +34,14 @@ class MockEntityManager implements EntityManagerInterface
         $this->realEntityManager = $realEntityManager;
     }
 
-    public function isUninitializedObject($value) {
+    public function isUninitializedObject(mixed $value): void
+    {
         echo __FUNCTION__ . "\n";
     }
 
     public function getProxyFactory(): ProxyFactory
     {
-        $config = $this->realEntityManager->getConfiguration();
-
-        return new ProxyFactory(
-            $this,
-            $config->getProxyDir(),
-            $config->getProxyNamespace(),
-        );
+        return $this->realEntityManager->getProxyFactory();
     }
 
     public function getMetadataFactory(): ClassMetadataFactory

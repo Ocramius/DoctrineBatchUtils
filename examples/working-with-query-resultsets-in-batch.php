@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 use Doctrine\ORM\EntityManager;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
 
-/** @var $entityManager EntityManager */
 $entityManager = call_user_func(require __DIR__ . '/bootstrap-orm.php');
+assert($entityManager instanceof EntityManager);
 
 // First, we persist a lot of data to work with. We do this in an iterator too to avoid killing our memory:
 $persistAllEntries = SimpleBatchIteratorAggregate::fromTraversableResult(
-    call_user_func(function () use ($entityManager) {
+    call_user_func(static function () use ($entityManager) {
         for ($i = 0; $i < 10000; $i += 1) {
             $entityManager->persist(new MyEntity($i));
 
@@ -16,15 +18,15 @@ $persistAllEntries = SimpleBatchIteratorAggregate::fromTraversableResult(
         }
     }),
     $entityManager,
-    100 // flush/clear after 100 iterations
+    100, // flush/clear after 100 iterations
 );
 
-\iterator_to_array($persistAllEntries); // quickly consume the previous iterator
+iterator_to_array($persistAllEntries); // quickly consume the previous iterator
 
-/** @var $savedEntries MyEntity[] */
+/** @var MyEntity[] $savedEntries */
 $savedEntries = SimpleBatchIteratorAggregate::fromQuery(
     $entityManager->createQuery(sprintf('SELECT e FROM %s e', MyEntity::class)),
-    100 // flush/clear after 100 iterations
+    100, // flush/clear after 100 iterations
 );
 
 foreach ($savedEntries as $savedEntry) {
