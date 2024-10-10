@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39c078cd0c1bf281bb3cb25e90fe4c59",
+    "content-hash": "2765fe4b59c31b0a58eba619b2f8164d",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -94,16 +94,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "4.2.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "b4a1c16ab0a13ae1bd3bb1abcb88573f80afc420"
+                "reference": "dadd35300837a3a2184bd47d403333b15d0a9bd0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/b4a1c16ab0a13ae1bd3bb1abcb88573f80afc420",
-                "reference": "b4a1c16ab0a13ae1bd3bb1abcb88573f80afc420",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/dadd35300837a3a2184bd47d403333b15d0a9bd0",
+                "reference": "dadd35300837a3a2184bd47d403333b15d0a9bd0",
                 "shasum": ""
             },
             "require": {
@@ -182,7 +182,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/4.2.0"
+                "source": "https://github.com/doctrine/dbal/tree/4.2.1"
             },
             "funding": [
                 {
@@ -198,7 +198,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-10T13:19:21+00:00"
+            "time": "2024-10-10T18:01:27+00:00"
         },
         {
             "name": "doctrine/deprecations",
