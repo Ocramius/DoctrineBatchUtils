@@ -18,15 +18,15 @@
         }
     ],
     "require": {
-        "php":                  "~8.1.0 || ~8.2.0 || ~8.3.0",
+        "php":                  "~8.2.0 || ~8.3.0 || ~8.4.0",
         "doctrine/orm":         "^3.3.0",
         "doctrine/persistence": "^3.4.0"
     },
     "require-dev": {
         "doctrine/coding-standard": "^12.0.0",
-        "roave/infection-static-analysis-plugin": "^1.35.0",
+        "roave/infection-static-analysis-plugin": "^1.36.0",
         "phpunit/phpunit": "^9.6.21",
-        "vimeo/psalm": "^5.26.1",
+        "vimeo/psalm": "^6.0.0",
         "doctrine/dbal" : "^4.2.1",
         "psalm/plugin-phpunit": "^0.19.0"
     },
@@ -46,7 +46,7 @@
             "infection/extension-installer": true
         },
         "platform": {
-            "php": "8.1.99"
+            "php": "8.2.99"
         }
     }
 }
