@@ -17,11 +17,6 @@
     </projectFiles>
 
     <issueHandlers>
-        <PossiblyUnusedParam>
-            <errorLevel type="suppress">
-                <directory name="test"/>
-            </errorLevel>
-        </PossiblyUnusedParam>
         <PossiblyUnusedMethod>
             <errorLevel type="suppress">
                 <directory name="test"/>
