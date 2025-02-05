@@ -4,18 +4,20 @@
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     bootstrap="./vendor/autoload.php"
     colors="true"
-    verbose="true"
-    beStrictAboutTodoAnnotatedTests="true"
     beStrictAboutOutputDuringTests="true"
     beStrictAboutChangesToGlobalState="true"
-    beStrictAboutTestsThatDoNotTestAnything="true"
-    beStrictAboutResourceUsageDuringSmallTests="true"
-    beStrictAboutCoversAnnotation="true">
-  <coverage includeUncoveredFiles="true">
+    failOnNotice="true"
+    failOnWarning="true"
+    failOnPhpunitDeprecation="true"
+    failOnDeprecation="true"
+    failOnEmptyTestSuite="true"
+>
+  <source>
     <include>
-      <directory suffix=".php">./src</directory>
+      <directory>src</directory>
     </include>
-  </coverage>
+  </source>
+
   <testsuite name="DoctrineBatchUtils tests">
     <directory>./test/DoctrineBatchUtilsTest</directory>
   </testsuite>

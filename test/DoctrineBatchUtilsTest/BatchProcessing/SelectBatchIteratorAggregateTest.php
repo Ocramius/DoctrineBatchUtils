@@ -11,6 +11,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\SelectBatchIteratorAggregate;
 use DoctrineBatchUtilsTest\MockEntityManager;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -20,7 +22,7 @@ use UnexpectedValueException;
 use function array_fill;
 use function count;
 
-/** @covers \DoctrineBatchUtils\BatchProcessing\SelectBatchIteratorAggregate */
+#[CoversClass(SelectBatchIteratorAggregate::class)]
 final class SelectBatchIteratorAggregateTest extends TestCase
 {
     /** @var AbstractQuery&MockObject */
@@ -284,6 +286,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
      *
      * @dataProvider iterationClearsProvider
      */
+    #[DataProvider('iterationClearsProvider')]
     public function testIterationClearsAtGivenBatchSizes(int $resultItemsCount, int $batchSize, int $expectedClearsCount): void
     {
         $object = new stdClass();
@@ -308,7 +311,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
     }
 
     /** @return non-empty-list<array{int<1, max>, int<1, max>, int<1, max>}> */
-    public function iterationClearsProvider(): array
+    public static function iterationClearsProvider(): array
     {
         return [
             [10, 5, 3],

@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
 use DoctrineBatchUtilsTest\MockEntityManager;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -19,7 +21,7 @@ use UnexpectedValueException;
 use function array_fill;
 use function count;
 
-/** @covers \DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate */
+#[CoversClass(SimpleBatchIteratorAggregate::class)]
 final class SimpleBatchIteratorAggregateTest extends TestCase
 {
     /** @var AbstractQuery&MockObject */
@@ -38,8 +40,6 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         $this->entityManager = $this->getMockBuilder(MockEntityManager::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->onlyMethods(['getClassMetadata', 'find'])
             ->getMock();
 
@@ -90,7 +90,6 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         }
     }
 
-    /** @uses \DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException */
     public function testIterationRollsBackOnMissingItems(): void
     {
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult([new stdClass()], $this->entityManager, 100);
@@ -247,6 +246,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
      *
      * @dataProvider iterationFlushesProvider
      */
+    #[DataProvider('iterationFlushesProvider')]
     public function testIterationFlushesAtGivenBatchSizes(int $resultItemsCount, int $batchSize, string $expectOutputString): void
     {
         $object = new stdClass();
@@ -272,7 +272,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     }
 
     /** @return non-empty-list<array{int<1, max>, int<1, max>, non-empty-string}> */
-    public function iterationFlushesProvider(): array
+    public static function iterationFlushesProvider(): array
     {
         return [
             [10, 5, "beginTransaction\nflush\nclear\nflush\nclear\nflush\nclear\ncommit\n"],
