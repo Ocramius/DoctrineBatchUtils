@@ -34,9 +34,11 @@ class MockEntityManager implements EntityManagerInterface
         $this->realEntityManager = $realEntityManager;
     }
 
-    public function isUninitializedObject(mixed $value): void
+    public function isUninitializedObject(mixed $value): bool
     {
         echo __FUNCTION__ . "\n";
+
+        return false;
     }
 
     public function getProxyFactory(): ProxyFactory
