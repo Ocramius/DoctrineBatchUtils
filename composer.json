@@ -19,7 +19,7 @@
     ],
     "require": {
         "php":                  "~8.2.0 || ~8.3.0 || ~8.4.0",
-        "doctrine/orm":         "^3.3.1",
+        "doctrine/orm":         "^3.3.2",
         "doctrine/persistence": "^4.0.0"
     },
     "require-dev": {
