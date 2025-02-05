@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b5be60430cd3a6d41625a1210584f6c",
+    "content-hash": "7f5c04b27b941711e8e2457a9fc173a4",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -6868,16 +6868,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "6.2.0",
+            "version": "6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "814dfde37b43a1fe6d9b0996e08b19661af53bc5"
+                "reference": "222dda8483516044c2ed7a4c3f197d7c9d6c3ddb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/814dfde37b43a1fe6d9b0996e08b19661af53bc5",
-                "reference": "814dfde37b43a1fe6d9b0996e08b19661af53bc5",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/222dda8483516044c2ed7a4c3f197d7c9d6c3ddb",
+                "reference": "222dda8483516044c2ed7a4c3f197d7c9d6c3ddb",
                 "shasum": ""
             },
             "require": {
@@ -6935,6 +6935,7 @@
                 "psalm-language-server",
                 "psalm-plugin",
                 "psalm-refactor",
+                "psalm-review",
                 "psalter"
             ],
             "type": "project",
@@ -6979,7 +6980,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2025-02-01T16:30:21+00:00"
+            "time": "2025-02-04T16:20:17+00:00"
         },
         {
             "name": "webmozart/assert",
