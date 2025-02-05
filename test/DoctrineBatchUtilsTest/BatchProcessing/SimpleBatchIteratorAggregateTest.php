@@ -155,8 +155,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
      */
     public function testIterationWithSuccessfulReFetchesInNestedIterableResult(): void
     {
-        $originalObjects = [[new stdClass()], [new stdClass()]];
-        $freshObjects    = [new stdClass(), new stdClass()];
+        $originalObjects = ['aaa' => [new stdClass()], 'bbb' => [new stdClass()]];
+        $freshObjects    = ['aaa' => new stdClass(), 'bbb' => new stdClass()];
 
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
 
@@ -165,8 +165,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
 
     public function testIterationWithSuccessfulReFetchesInNestedIterableResultFromQuery(): void
     {
-        $originalObjects = [[new stdClass()], [new stdClass()]];
-        $freshObjects    = [new stdClass(), new stdClass()];
+        $originalObjects = ['aaa' => [new stdClass()], 'bbb' => [new stdClass()]];
+        $freshObjects    = ['aaa' => new stdClass(), 'bbb' => new stdClass()];
 
         $this->query->method('toIterable')->willReturn(new ArrayIterator($originalObjects));
         $iterator = SimpleBatchIteratorAggregate::fromQuery($this->query, 100);
@@ -176,8 +176,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
 
     public function testIterationWithSuccessfulReFetchesInNestedIterableResultFromTraversableResult(): void
     {
-        $originalObjects = [[new stdClass()], [new stdClass()]];
-        $freshObjects    = [new stdClass(), new stdClass()];
+        $originalObjects = ['aaa' => [new stdClass()], 'bbb' => [new stdClass()]];
+        $freshObjects    = ['aaa' => new stdClass(), 'bbb' => new stdClass()];
 
         $this->query->method('toIterable')->willReturn(new ArrayIterator($originalObjects));
         $iterator = SimpleBatchIteratorAggregate::fromTraversableResult(new ArrayIterator($originalObjects), $this->entityManager, 100);
@@ -186,21 +186,21 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     }
 
     /**
-     * @param stdClass[][] $originalObjects
-     * @param stdClass[]   $freshObjects
+     * @param array{aaa: list{stdClass}, bbb: list{stdClass}} $originalObjects
+     * @param array{aaa: stdClass, bbb: stdClass}             $freshObjects
      */
     private function assertSuccessfulReFetchesInNestedIterableResult(SimpleBatchIteratorAggregate $iterator, array $originalObjects, array $freshObjects): void
     {
         $this->metadata->method('getIdentifierValues')->willReturnMap(
             [
-                [$originalObjects[0][0], ['id' => 123]],
-                [$originalObjects[1][0], ['id' => 456]],
+                [$originalObjects['aaa'][0], ['id' => 123]],
+                [$originalObjects['bbb'][0], ['id' => 456]],
             ],
         );
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap(
             [
-                [stdClass::class, ['id' => 123], null, null, $freshObjects[0]],
-                [stdClass::class, ['id' => 456], null, null, $freshObjects[1]],
+                [stdClass::class, ['id' => 123], null, null, $freshObjects['aaa']],
+                [stdClass::class, ['id' => 456], null, null, $freshObjects['bbb']],
             ],
         );
 
@@ -212,7 +212,13 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
             $iteratedObjects[$key] = $value;
         }
 
-        $this->assertSame([$freshObjects[0], $freshObjects[1]], $iteratedObjects);
+        $this->assertSame(
+            [
+                'aaa' => $freshObjects['aaa'],
+                'bbb' => $freshObjects['bbb'],
+            ],
+            $iteratedObjects,
+        );
     }
 
     /**

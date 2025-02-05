@@ -7,5 +7,7 @@
     "timeout": 15,
     "logs": {
         "text": "infectionlog.txt"
-    }
+    },
+    "minMsi": 93.0,
+    "minCoveredMsi": 94.0
 }
