@@ -146,6 +146,7 @@ final class SimpleBatchIteratorAggregate implements IteratorAggregate
         return $freshValue;
     }
 
+    /** @param int<0, max> $iteration */
     private function flushAndClearBatch(int $iteration): void
     {
         if ($iteration % $this->batchSize) {

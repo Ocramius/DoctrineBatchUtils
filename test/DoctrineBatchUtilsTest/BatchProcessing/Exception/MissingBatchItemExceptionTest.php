@@ -7,13 +7,14 @@ namespace DoctrineBatchUtilsTest\BatchProcessing\Exception;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\Exception\ExceptionInterface;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use UnexpectedValueException;
 
 use function spl_object_hash;
 
-/** @covers \DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException */
+#[CoversClass(MissingBatchItemException::class)]
 final class MissingBatchItemExceptionTest extends TestCase
 {
     public function testFromInvalidReference(): void

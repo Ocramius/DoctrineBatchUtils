@@ -143,6 +143,7 @@ final class SelectBatchIteratorAggregate implements IteratorAggregate
         return $freshValue;
     }
 
+    /** @param int<0, max> $iteration */
     private function clearBatch(int $iteration): void
     {
         if ($iteration % $this->batchSize) {
