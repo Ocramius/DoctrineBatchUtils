@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\Exception\MissingBatchItemException;
 use DoctrineBatchUtils\BatchProcessing\SimpleBatchIteratorAggregate;
 use DoctrineBatchUtilsTest\MockEntityManager;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -33,6 +34,7 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
     /** @var ClassMetadata&MockObject */
     private ClassMetadata $metadata;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->metadata      = $this->createMock(ClassMetadata::class);

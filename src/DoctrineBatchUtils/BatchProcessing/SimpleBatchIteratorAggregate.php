@@ -20,6 +20,8 @@ use function key;
  * @template TKey
  * @template TValue
  * @implements IteratorAggregate<TKey, TValue>
+ * @psalm-suppress MissingOverrideAttribute Psalm is confused by the positioning of the {@see \Override} attribute,
+ *                                            so we skipped adding it here.
  */
 final class SimpleBatchIteratorAggregate implements IteratorAggregate
 {

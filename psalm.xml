@@ -17,6 +17,8 @@
     </projectFiles>
 
     <issueHandlers>
+        <!-- life is too short to care about #[\Override] - the codebase is not inheritance-heavy -->
+        <MissingOverrideAttribute errorLevel="suppress"/>
         <PossiblyUnusedMethod>
             <errorLevel type="suppress">
                 <directory name="test"/>
