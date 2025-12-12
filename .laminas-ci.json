@@ -3,17 +3,14 @@
     "bcmath",
     "pcov"
   ],
-  "ini": [
-    "memory_limit=-1"
-  ],
   "exclude": [
-    {"name": "Infection [8.2, locked]"}
+    {"name": "Infection"}
   ],
   "additional_checks": [
     {
-      "name": "Infection (with PCOV)",
+      "name": "Infection (PCOV)",
       "job": {
-        "php": "8.4",
+        "php": "@lowest",
         "dependencies": "locked",
         "command": "./vendor/bin/roave-infection-static-analysis-plugin"
       }

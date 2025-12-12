@@ -12,7 +12,7 @@
     failOnDeprecation="true"
     failOnEmptyTestSuite="true"
 >
-  <source>
+  <source ignoreIndirectDeprecations="true">
     <include>
       <directory>src</directory>
     </include>

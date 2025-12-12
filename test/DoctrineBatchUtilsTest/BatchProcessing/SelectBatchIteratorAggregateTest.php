@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use DoctrineBatchUtils\BatchProcessing\SelectBatchIteratorAggregate;
 use DoctrineBatchUtilsTest\MockEntityManager;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -34,6 +35,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
     /** @var ClassMetadata&MockObject */
     private ClassMetadata $metadata;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->query         = $this->createMock(AbstractQuery::class);
@@ -132,6 +134,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
              * @inheritDoc
              * @template TRequested of object
              */
+            #[Override]
             public function getClassMetadata($className): ClassMetadata
             {
                 echo __FUNCTION__ . "\n";
@@ -142,6 +145,7 @@ final class SelectBatchIteratorAggregateTest extends TestCase
                 return $metadata;
             }
 
+            #[Override]
             public function find(string $className, mixed $id, LockMode|int|null $lockMode = null, int|null $lockVersion = null): object|null
             {
                 echo __FUNCTION__ . "\n";

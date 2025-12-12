@@ -15,7 +15,7 @@ use function sprintf;
 /**
  * Marker interface for exceptions thrown in the batch processing component
  */
-class MissingBatchItemException extends UnexpectedValueException implements ExceptionInterface
+final class MissingBatchItemException extends UnexpectedValueException implements ExceptionInterface
 {
     public static function fromInvalidReference(ClassMetadata $metadata, object $object): MissingBatchItemException
     {
