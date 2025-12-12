@@ -18,17 +18,17 @@
         }
     ],
     "require": {
-        "php":                  "~8.2.0 || ~8.3.0 || ~8.4.0",
-        "doctrine/orm":         "^3.3.2",
-        "doctrine/persistence": "^4.0.0"
+        "php":                  "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
+        "doctrine/orm":         "^3.5.8",
+        "doctrine/persistence": "^4.1.1"
     },
     "require-dev": {
         "doctrine/coding-standard": "^14.0.0",
-        "roave/infection-static-analysis-plugin": "^1.36.0",
-        "phpunit/phpunit": "^11.5.7",
-        "vimeo/psalm": "^6.5.1",
-        "doctrine/dbal" : "^4.2.2",
-        "psalm/plugin-phpunit": "^0.19.2"
+        "roave/infection-static-analysis-plugin": "^1.42.0",
+        "phpunit/phpunit": "^11.5.46",
+        "vimeo/psalm": "^6.14.2",
+        "doctrine/dbal" : "^4.4.1",
+        "psalm/plugin-phpunit": "^0.19.5"
     },
     "autoload": {
         "psr-4": {
