@@ -163,6 +163,7 @@ class MockEntityManager implements EntityManagerInterface
         return $this->realEntityManager->isOpen();
     }
 
+    /** {@inheritDoc} */
     #[Override]
     public function newHydrator($hydrationMode): AbstractHydrator
     {
