@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8316f981a0eac5ecc2deba83607fe030",
+    "content-hash": "84014e057481b036f23df1ceb240e781",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -7035,16 +7035,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v7.4.3",
+            "version": "v7.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "2f8e1a6cdf590ca63715da4d3a7a3327404a523f"
+                "reference": "608476f4604102976d687c483ac63a79ba18cc97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/2f8e1a6cdf590ca63715da4d3a7a3327404a523f",
-                "reference": "2f8e1a6cdf590ca63715da4d3a7a3327404a523f",
+                "url": "https://api.github.com/repos/symfony/process/zipball/608476f4604102976d687c483ac63a79ba18cc97",
+                "reference": "608476f4604102976d687c483ac63a79ba18cc97",
                 "shasum": ""
             },
             "require": {
@@ -7076,7 +7076,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v7.4.3"
+                "source": "https://github.com/symfony/process/tree/v7.4.5"
             },
             "funding": [
                 {
@@ -7096,7 +7096,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-12-19T10:00:43+00:00"
+            "time": "2026-01-26T15:07:59+00:00"
         },
         {
             "name": "thecodingmachine/safe",
@@ -7289,16 +7289,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "6.14.3",
+            "version": "6.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "d0b040a91f280f071c1abcb1b77ce3822058725a"
+                "reference": "204d06619833a297b402cbc66be7f2df74437db4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/d0b040a91f280f071c1abcb1b77ce3822058725a",
-                "reference": "d0b040a91f280f071c1abcb1b77ce3822058725a",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/204d06619833a297b402cbc66be7f2df74437db4",
+                "reference": "204d06619833a297b402cbc66be7f2df74437db4",
                 "shasum": ""
             },
             "require": {
@@ -7403,7 +7403,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2025-12-23T15:36:48+00:00"
+            "time": "2026-01-30T13:53:17+00:00"
         },
         {
             "name": "webmozart/assert",
