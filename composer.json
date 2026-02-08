@@ -26,7 +26,7 @@
         "doctrine/coding-standard": "^14.0.0",
         "roave/infection-static-analysis-plugin": "^1.43.0",
         "phpunit/phpunit": "^12.5.4",
-        "vimeo/psalm": "^6.15.0",
+        "vimeo/psalm": "^6.15.1",
         "doctrine/dbal" : "^4.4.1",
         "psalm/plugin-phpunit": "^0.19.5"
     },
