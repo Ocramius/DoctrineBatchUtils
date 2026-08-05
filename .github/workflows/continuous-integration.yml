@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Gather CI configuration
         id: matrix
-        uses: laminas/laminas-ci-matrix-action@1.33.0
+        uses: laminas/laminas-ci-matrix-action@6383012fc66934b529727af575aa783bd82a4c03 # 1.33.0
 
   qa:
     name: QA Checks
@@ -27,7 +27,7 @@ jobs:
       matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
     steps:
       - name: ${{ matrix.name }}
-        uses: laminas/laminas-continuous-integration-action@1.43.0
+        uses: laminas/laminas-continuous-integration-action@5f4512e23ab587455e9f0a39e4616dad4550de4f # 1.43.0
         env:
           "GITHUB_TOKEN": ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -51,17 +51,17 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v6"
+        uses: "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803" # v6
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@2.37.1"
+        uses: "shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc" # 2.37.1
         with:
           coverage: "pcov"
           php-version: "${{ matrix.php-version }}"
           tools: composer:v2, cs2pr
 
       - name: "Cache dependencies"
-        uses: "actions/cache@v5"
+        uses: "actions/cache@caa296126883cff596d87d8935842f9db880ef25" # v5
         with:
           path: |
             ~/.composer/cache
