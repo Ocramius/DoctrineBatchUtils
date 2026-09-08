@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DoctrineBatchUtilsTest\BatchProcessing;
 
 use ArrayIterator;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -113,8 +114,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
             [$originalObjects['bar'], ['id' => 456]],
         ]);
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap([
-            [stdClass::class, ['id' => 123], null, null, $freshObjects['foo']],
-            [stdClass::class, ['id' => 456], null, null, $freshObjects['bar']],
+            [stdClass::class, ['id' => 123], LockMode::NONE, null, $freshObjects['foo']],
+            [stdClass::class, ['id' => 456], LockMode::NONE, null, $freshObjects['bar']],
         ]);
 
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult($originalObjects, $this->entityManager, 100);
@@ -180,8 +181,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         );
         $this->entityManager->expects(self::exactly(count($originalObjects)))->method('find')->willReturnMap(
             [
-                [stdClass::class, ['id' => 123], null, null, $freshObjects['aaa']],
-                [stdClass::class, ['id' => 456], null, null, $freshObjects['bbb']],
+                [stdClass::class, ['id' => 123], LockMode::NONE, null, $freshObjects['aaa']],
+                [stdClass::class, ['id' => 456], LockMode::NONE, null, $freshObjects['bbb']],
             ],
         );
 
