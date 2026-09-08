@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DoctrineBatchUtilsTest;
 
 use DateTimeInterface;
-use Doctrine\Common\EventManager;
 use Doctrine\Common\EventManagerInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\LockMode;
