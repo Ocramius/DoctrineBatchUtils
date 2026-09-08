@@ -23,7 +23,11 @@ final class MissingBatchItemExceptionTest extends TestCase
         $metadata = $this->createMock(ClassMetadata::class);
 
         $metadata->method('getName')->willReturn('Foo');
-        $metadata->method('getIdentifierValues')->with($object)->willReturn(['abc' => 'def']);
+        $metadata
+            ->expects(self::atLeastOnce())
+            ->method('getIdentifierValues')
+            ->with($object)
+            ->willReturn(['abc' => 'def']);
 
         $exception = MissingBatchItemException::fromInvalidReference($metadata, $object);
 

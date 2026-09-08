@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DoctrineBatchUtilsTest;
 
 use DateTimeInterface;
-use Doctrine\Common\EventManager;
+use Doctrine\Common\EventManagerInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\Cache;
@@ -146,7 +146,7 @@ class MockEntityManager implements EntityManagerInterface
     }
 
     #[Override]
-    public function getEventManager(): EventManager
+    public function getEventManager(): EventManagerInterface
     {
         return $this->realEntityManager->getEventManager();
     }
@@ -189,7 +189,7 @@ class MockEntityManager implements EntityManagerInterface
     }
 
     #[Override]
-    public function find(string $className, mixed $id, LockMode|int|null $lockMode = null, int|null $lockVersion = null): object|null
+    public function find(string $className, mixed $id, LockMode|int|null $lockMode = LockMode::NONE, int|null $lockVersion = null): object|null
     {
         return $this->realEntityManager->find($className, $id, $lockMode, $lockVersion);
     }
