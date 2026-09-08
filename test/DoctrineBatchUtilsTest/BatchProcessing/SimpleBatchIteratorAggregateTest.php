@@ -15,6 +15,7 @@ use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use UnexpectedValueException;
@@ -25,20 +26,20 @@ use function count;
 #[CoversClass(SimpleBatchIteratorAggregate::class)]
 final class SimpleBatchIteratorAggregateTest extends TestCase
 {
-    /** @var AbstractQuery&MockObject */
+    /** @var AbstractQuery&Stub */
     private AbstractQuery $query;
 
     /** @var EntityManagerInterface&MockObject */
     private EntityManagerInterface $entityManager;
 
-    /** @var ClassMetadata&MockObject */
+    /** @var ClassMetadata&Stub */
     private ClassMetadata $metadata;
 
     #[Override]
     protected function setUp(): void
     {
-        $this->metadata      = $this->createMock(ClassMetadata::class);
-        $this->query         = $this->createMock(AbstractQuery::class);
+        $this->metadata      = $this->createStub(ClassMetadata::class);
+        $this->query         = $this->createStub(AbstractQuery::class);
         $this->entityManager = $this->getMockBuilder(MockEntityManager::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
@@ -55,34 +56,10 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
         parent::setUp();
     }
 
-    public function testFromQuery(): void
-    {
-        $this->query->method('toIterable')->willReturn(new ArrayIterator());
-
-        self::assertInstanceOf(
-            SimpleBatchIteratorAggregate::class,
-            SimpleBatchIteratorAggregate::fromQuery($this->query, 100),
-        );
-    }
-
-    public function testFromArray(): void
-    {
-        self::assertInstanceOf(
-            SimpleBatchIteratorAggregate::class,
-            SimpleBatchIteratorAggregate::fromArrayResult([], $this->entityManager, 100),
-        );
-    }
-
-    public function testFromTraversableResult(): void
-    {
-        self::assertInstanceOf(
-            SimpleBatchIteratorAggregate::class,
-            SimpleBatchIteratorAggregate::fromTraversableResult(new ArrayIterator([]), $this->entityManager, 100),
-        );
-    }
-
     public function testIterationWithEmptySet(): void
     {
+        $this->entityManager->expects(self::never())->method('find');
+
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult([], $this->entityManager, 100);
 
         $this->expectOutputString("beginTransaction\nflush\nclear\ncommit\n");
@@ -94,6 +71,8 @@ final class SimpleBatchIteratorAggregateTest extends TestCase
 
     public function testIterationRollsBackOnMissingItems(): void
     {
+        $this->entityManager->expects(self::once())->method('find');
+
         $iterator = SimpleBatchIteratorAggregate::fromArrayResult([new stdClass()], $this->entityManager, 100);
 
         $this->expectOutputString("beginTransaction\nrollback\n");

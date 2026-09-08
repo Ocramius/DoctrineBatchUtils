@@ -11,6 +11,7 @@
     failOnPhpunitDeprecation="true"
     failOnDeprecation="true"
     failOnEmptyTestSuite="true"
+    failOnAllIssues="true"
 >
   <source ignoreIndirectDeprecations="true">
     <include>

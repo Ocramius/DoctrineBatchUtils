@@ -15,6 +15,7 @@ use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use stdClass;
@@ -26,21 +27,21 @@ use function count;
 #[CoversClass(SelectBatchIteratorAggregate::class)]
 final class SelectBatchIteratorAggregateTest extends TestCase
 {
-    /** @var AbstractQuery&MockObject */
+    /** @var AbstractQuery&Stub */
     private AbstractQuery $query;
 
     /** @var EntityManagerInterface&MockObject */
     private EntityManagerInterface $entityManager;
 
-    /** @var ClassMetadata&MockObject */
+    /** @var ClassMetadata&Stub */
     private ClassMetadata $metadata;
 
     #[Override]
     protected function setUp(): void
     {
-        $this->query         = $this->createMock(AbstractQuery::class);
+        $this->query         = $this->createStub(AbstractQuery::class);
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
-        $this->metadata      = $this->createMock(ClassMetadata::class);
+        $this->metadata      = $this->createStub(ClassMetadata::class);
 
         $this->entityManager->expects(self::never())->method('flush');
         $this->query->method('getEntityManager')->willReturn($this->entityManager);
@@ -110,8 +111,8 @@ final class SelectBatchIteratorAggregateTest extends TestCase
         $originalObjects = ['foo' => new stdClass(), 'bar' => new stdClass()];
         $freshObjects    = ['foo' => new stdClass(), 'bar' => new stdClass()];
 
-        $query         = $this->createMock(AbstractQuery::class);
-        $metadata      = $this->createMock(ClassMetadata::class);
+        $query         = $this->createStub(AbstractQuery::class);
+        $metadata      = $this->createStub(ClassMetadata::class);
         $entityManager = new class ($metadata, $freshObjects) extends MockEntityManager {
             private ClassMetadata $classMetadata;
             /** @var array<non-empty-string, object> */
