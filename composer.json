@@ -20,15 +20,15 @@
     "require": {
         "php":                  "~8.3.0 || ~8.4.0 || ~8.5.0",
         "doctrine/orm":         "^3.7.0",
-        "doctrine/persistence": "^4.1.1"
+        "doctrine/persistence": "^4.2.0"
     },
     "require-dev": {
         "doctrine/coding-standard": "^14.0.0",
-        "roave/infection-static-analysis-plugin": "^1.43.0",
-        "phpunit/phpunit": "^12.5.4",
-        "vimeo/psalm": "^6.16.0",
-        "doctrine/dbal" : "^4.4.2",
-        "psalm/plugin-phpunit": "^0.19.5"
+        "roave/infection-static-analysis-plugin": "^1.44.0",
+        "phpunit/phpunit": "^12.5.35",
+        "vimeo/psalm": "^6.17.1",
+        "doctrine/dbal" : "^4.4.4",
+        "psalm/plugin-phpunit": "^0.20.2"
     },
     "autoload": {
         "psr-4": {
