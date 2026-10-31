@@ -19,16 +19,16 @@
     ],
     "require": {
         "php":                  "~8.3.0 || ~8.4.0 || ~8.5.0",
-        "doctrine/orm":         "^3.7.0",
-        "doctrine/persistence": "^4.1.1"
+        "doctrine/orm":         "^3.7.6",
+        "doctrine/persistence": "^4.2.1"
     },
     "require-dev": {
         "doctrine/coding-standard": "^14.0.0",
-        "roave/infection-static-analysis-plugin": "^1.43.0",
-        "phpunit/phpunit": "^12.5.4",
-        "vimeo/psalm": "^6.16.0",
-        "doctrine/dbal" : "^4.4.2",
-        "psalm/plugin-phpunit": "^0.19.5"
+        "roave/infection-static-analysis-plugin": "^1.44.0",
+        "phpunit/phpunit": "^12.5.42",
+        "vimeo/psalm": "^6.20.4",
+        "doctrine/dbal" : "^4.5.0",
+        "psalm/plugin-phpunit": "^0.21.1"
     },
     "autoload": {
         "psr-4": {
