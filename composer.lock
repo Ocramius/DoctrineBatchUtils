@@ -1685,16 +1685,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v7.4.24",
+            "version": "v7.4.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "71cd5014e85d05d46796ce60dc4aed9104122b89"
+                "reference": "93c0ef02c1548d3b9498e8c4cc92f77106ca5d46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/71cd5014e85d05d46796ce60dc4aed9104122b89",
-                "reference": "71cd5014e85d05d46796ce60dc4aed9104122b89",
+                "url": "https://api.github.com/repos/symfony/string/zipball/93c0ef02c1548d3b9498e8c4cc92f77106ca5d46",
+                "reference": "93c0ef02c1548d3b9498e8c4cc92f77106ca5d46",
                 "shasum": ""
             },
             "require": {
@@ -1752,7 +1752,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v7.4.24"
+                "source": "https://github.com/symfony/string/tree/v7.4.25"
             },
             "funding": [
                 {
@@ -1772,8 +1772,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-24T15:24:17+00:00",
-            "published-time": "2026-11-25T09:24:05+00:00"
+            "time": "2026-11-25T18:09:18+00:00",
+            "published-time": "2026-11-27T14:42:23+00:00"
         },
         {
             "name": "symfony/var-exporter",
@@ -3768,16 +3768,16 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "6.15.1",
+            "version": "6.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jsonrainbow/json-schema.git",
-                "reference": "24021a898c17193ed7c2111b5fbf1c6486ae85ff"
+                "reference": "17a3a7903640817c1a4878d7c71c0221f9b5de97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/24021a898c17193ed7c2111b5fbf1c6486ae85ff",
-                "reference": "24021a898c17193ed7c2111b5fbf1c6486ae85ff",
+                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/17a3a7903640817c1a4878d7c71c0221f9b5de97",
+                "reference": "17a3a7903640817c1a4878d7c71c0221f9b5de97",
                 "shasum": ""
             },
             "require": {
@@ -3793,6 +3793,9 @@
                 "phpspec/prophecy": "^1.19",
                 "phpstan/phpstan": "^1.12",
                 "phpunit/phpunit": "^8.5"
+            },
+            "suggest": {
+                "ext-intl": "Required to validate the idn-hostname format in Draft-07 and Draft 2019-09"
             },
             "bin": [
                 "bin/validate-json"
@@ -3827,7 +3830,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jsonrainbow/json-schema/issues",
-                "source": "https://github.com/jsonrainbow/json-schema/tree/6.15.1"
+                "source": "https://github.com/jsonrainbow/json-schema/tree/6.16.0"
             },
             "funding": [
                 {
@@ -3835,8 +3838,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-11-24T20:35:12+00:00",
-            "published-time": "2026-11-24T20:35:18+00:00"
+            "time": "2026-11-27T15:41:07+00:00",
+            "published-time": "2026-11-27T15:41:12+00:00"
         },
         {
             "name": "kelunik/certificate",
@@ -7057,16 +7060,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v7.4.24",
+            "version": "v7.4.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "37a6b215cf82c881409e2ffaec61757964abd1f7"
+                "reference": "c6adf2262feb9e08ba64632d2703987c24555e0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/37a6b215cf82c881409e2ffaec61757964abd1f7",
-                "reference": "37a6b215cf82c881409e2ffaec61757964abd1f7",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/c6adf2262feb9e08ba64632d2703987c24555e0d",
+                "reference": "c6adf2262feb9e08ba64632d2703987c24555e0d",
                 "shasum": ""
             },
             "require": {
@@ -7103,7 +7106,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/filesystem/tree/v7.4.24"
+                "source": "https://github.com/symfony/filesystem/tree/v7.4.25"
             },
             "funding": [
                 {
@@ -7123,21 +7126,21 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-24T15:20:15+00:00",
-            "published-time": "2026-11-25T09:23:31+00:00"
+            "time": "2026-11-27T10:49:08+00:00",
+            "published-time": "2026-11-27T14:43:03+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v7.4.24",
+            "version": "v7.4.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "d1a9510360de57f80a9f88e63364f6c547cab352"
+                "reference": "9e170627d10f300da6854be9efbfe3040f17716e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/d1a9510360de57f80a9f88e63364f6c547cab352",
-                "reference": "d1a9510360de57f80a9f88e63364f6c547cab352",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/9e170627d10f300da6854be9efbfe3040f17716e",
+                "reference": "9e170627d10f300da6854be9efbfe3040f17716e",
                 "shasum": ""
             },
             "require": {
@@ -7172,7 +7175,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/finder/tree/v7.4.24"
+                "source": "https://github.com/symfony/finder/tree/v7.4.25"
             },
             "funding": [
                 {
@@ -7192,8 +7195,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-24T15:02:12+00:00",
-            "published-time": "2026-11-25T09:23:55+00:00"
+            "time": "2026-11-27T13:38:24+00:00",
+            "published-time": "2026-11-27T14:43:29+00:00"
         },
         {
             "name": "symfony/polyfill-php85",
